@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content=-type" content"text/html;charset=utf-8">
+	<title></title>
+</head>
+<body>
+	<div id="test" style="width:100px;height:100px;background-color:red;position:absolute;"></div>
+	<script type="text/javascript" src="./promise-6.0.0(cutting).js"></script>
+	<script type="text/javascript">
+		var i = 0;
+		var el = document.getElementById('test');
+		var thenable1 = {then: function(resolve, reject){
+			setTimeout(function(){
+				console.log(1);
+				el.style.left = (el.offsetLeft + 200) + 'px';
+				resolve && resolve('');
+			}, 2000);
+		}};
+		var thenable2 = {then: function(resolve, reject){
+			setTimeout(function(){
+				console.log(2);
+				el.style.left = (el.offsetLeft + 200) + 'px';
+				resolve && resolve('');
+			}, 2000);
+		}};
+		var thenable3 = {then: function(resolve, reject){
+			setTimeout(function(){
+				console.log(3);
+				el.style.left = (el.offsetLeft + 200) + 'px';
+				resolve && resolve('');
+			}, 2000);
+		}};
+		var p = Promise.resolve(thenable1);
+		p.then(function(){
+			return thenable2;
+		}).then(function(){
+			return thenable3;
+		});
+	</script>
+</body>
+</html>
