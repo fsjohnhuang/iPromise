@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<title></title>
+	<script type="text/javascript" src="./jsDeferred.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+	var d = Deferred.loop(3,function(i){
+		return i;
+	});
+	d.next(function(val){
+		console.log(val);
+	});
+	</script>
+</body>
+</html>
