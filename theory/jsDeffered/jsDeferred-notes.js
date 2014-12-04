@@ -1,8 +1,11 @@
 function Deferred () { return (this instanceof Deferred) ? this.init() : new Deferred() }
+// 默认的成功事件处理函数
 Deferred.ok = function (x) { return x };
+// 默认的失败事件处理函数
 Deferred.ng = function (x) { throw  x };
 Deferred.prototype = {
 	_id : 0xe38286e381ae,
+	// 初始化函数
 	init : function () {
 		this._next    = null;
 		this.callback = {
@@ -11,7 +14,6 @@ Deferred.prototype = {
 		};
 		return this;
 	},
-
 	next  : function (fun) { return this._post("ok", fun) },
 	error : function (fun) { return this._post("ng", fun) },
 	call  : function (val) { return this._fire("ok", val) },
@@ -318,7 +320,7 @@ Deferred.connect = function (funo, options) {
 			var errorback = function () { d.fail(arguments) };
 			args.splice(errorbackArgIndex, 0, errorback);
 		}
-		// 相当于setTimeout(function(){ func.apply(target, args) }, 0)
+		// 相当于setTimeout(function(){ func.apply(target, args) })
 		Deferred.next(function () { func.apply(target, args) });
 		return d;
 	};
