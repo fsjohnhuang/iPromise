@@ -7,11 +7,9 @@
 </head>
 <body>
 	<script type="text/javascript">
-	var d = Deferred.loop(3,function(i){
-		return i;
-	});
-	d.next(function(val){
-		console.log(val);
+	Deferred.define();	
+	parallel([1,3]).next(function(vals){
+		console.log(vals);
 	});
 	</script>
 </body>
