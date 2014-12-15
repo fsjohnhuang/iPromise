@@ -1,7 +1,16 @@
-iPromise v0.0.3
+iPromise v0.0.4
 ========
 
 An implementation for promises/A+<br/>
+
+##v0.0.4
+**bug修复**<br/>
+1. \#20141215 可重复添加回调函数->仅能添加一次回调函数<br/>
+
+**新特性**<br/>
+1. 新增API`iPromise.all()`<br/>
+2. 新增API`iPromise.any()`<br/>
+
 
 ##v0.0.3
 **新特性**<Br/>

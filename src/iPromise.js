@@ -1,10 +1,10 @@
 /*!
  * An implementation for Promises/A+
  * @author fsjohnhuang
- * @version v0.0.3
+ * @version v0.0.4
  */
 ;(function(exports, undefined){
-	var version = '0.0.3'
+	var version = '0.0.4'
 
 	var iPromise = exports.iPromise = function(mixin){
 		var state = {
@@ -27,7 +27,7 @@
 			finally: function(){}
 		}
 
-		var deferred = {
+		var deferred = state.curr = {
 			then: function(fulfilledFn, rejectedFn, progressFn, finallyFn){
 				return post(state, fulfilledFn, rejectedFn, progressFn, finallyFn)
 			},
@@ -63,9 +63,48 @@
 		return deferred
 	}
 
+	iPromise.all = function(){
+		return some.apply(null, [1].concat(toArray(arguments)))
+	}
+	iPromise.any = function(){
+		return some.apply(null, [0].concat(toArray(arguments)))
+	}
+
+	var some = function(isAll){
+		var i = 0, results = [], args
+		if (/Array|Object/.test(Object.prototype.toString.call(arguments[1])))
+			args = arguments[1]
+		else
+			args = toArray(arguments, 1)
+
+		var deferred = iPromise()
+		for (var p in args){
+			++i
+			results[p] = args[p]
+			;(function(p){
+				if (typeof results[p].then === 'function'){
+					results[p].then(function(){
+						results[p] = arguments
+
+						if (--i);else
+							deferred.resolve.apply(deferred, results)	
+					}, deferred.reject)
+				}
+				else if(!--i){
+					deferred.resolve.apply(deferred, results)	
+				}
+			}(p))
+		}
+
+		return deferred.then()
+	}
+
 	var post = function(state /*...[Function]*/){
-		var fns = toArray(arguments, 1)
+		// fix: #20141215
+		if (state.dirty) return state.curr
+
 		state.dirty = true
+		var fns = toArray(arguments, 1)
 		var i = -1
 		configTuple.each(0, function(cb){
 			var fn = fns[++i]
