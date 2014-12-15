@@ -4,21 +4,26 @@
  * @version v0.0.2
  */
 ;(function(exports, undefined){
-	var Version = '0.0.2'
+	var version = '0.0.2'
 
 	var iPromise = exports.iPromise = function(mixin){
 		var state = {
 			dirty: false,
 			status: 'pending',
-			fulfilled: function(v){
+			fulfilled: function(){
 				state.status = 'fulfilled'
-				return v
+				state.val = arguments 
+				return arguments
 			},
-			rejected: function(r){
+			rejected: function(){
 				state.status = 'rejected'
-				return r
+				state.val = arguments
+				return arguments
 			},
-			progress: function(v){return v},
+			progress: function(){
+				state.val = arguments
+				return arguments
+			},
 			finally: function(){}
 		}
 
@@ -49,6 +54,13 @@
 				}
 			}(i)
 
+		if (mixin != undefined)
+			if (typeof mixin === 'function')
+				mixin(deferred[statusMethodTuple[0][1]], deferred[statusMethodTuple[1][1]], deferred[statusMethodTuple[2][1]])
+			else
+				for (var p in mixin) if (p in deferred);else
+					deferred[p] = mixin[p]
+
 		return deferred
 	}
 
@@ -73,6 +85,8 @@
 			}
 		})
 
+		statusMethodTuple.find(state.status) && state[statusMethodTuple.find(state.status)[0]].apply(this, state.val)
+
 		state.next = iPromise()
 		return extend({}, state.next, 'then catch progress finally')
 	}
@@ -92,10 +106,12 @@
 			}
 			return statusMethodTuple.find(state.status)[1]
 		}()
-		state.next && state.next[method](val)
+		state.next && state.next[method].apply(this, toArray(val))
 	}
 
 	var toArray = function(arrayLike){
+		if (arrayLike == undefined || !('length' in arrayLike)) return [arrayLike]
+
 		try{
 			return [].slice.call(arrayLike)
 		}

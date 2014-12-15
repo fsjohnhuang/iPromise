@@ -8,10 +8,11 @@
 	<button onclick="test1();">测试1</button>
 	<button onclick="test2();">测试2</button>
 	<button onclick="test3();">测试3</button>
+	<button onclick="test4();">测试4</button>
 	<script type="text/javascript" src="../src/iPromise.js"></script>
 	<script type="text/javascript">
+	var promise = new iPromise()
 	var test1 = function(){
-		var promise = new iPromise()
 		promise.resolve('hello1')
 		promise
 			.then(function(data){
@@ -41,9 +42,10 @@
 				alert(data)
 			})
 	}
+	var promise2 = new iPromise()	
 	var test2 = function(){
-		var promise = new iPromise()	
-		promise
+		promise2.resolve('hello');
+		promise2
 			.then(null)
 			.then(function(data){
 				alert(data);
@@ -55,28 +57,35 @@
 			.catch(function(data){
 				alert(data);	
 			});
-		promise.resolve('hello');
 	};
 	var test3 = function(){
-		var promise = new iPromise();	
-		promise.then(function(data){
+		var promise3 = iPromise(function(resolve, reject, notify){
+			notify('test')	
+		});		
+		promise3.then(function(data){
 			alert(data);
 			return new iPromise(function(resolve){
 				resolve('hello2');
 			});
 		}).then(function(data){
 			alert(data);
-		});
-		promise.then(function(data){
-			alert(data);
-			return new iPromise(function(resolve){
-				resolve('hello3');
+		}).progress(function(v){
+			alert(v);
+			return new iPromise(function(resolve, reject, notify){
+				notify('hello7');
 			});
-		}).then(function(data){
-			alert(data);
+		}).then().progress(function(t){
+			alert(t)
 		});
-		promise.resolve('hello1');
 	};
+	var p4 = iPromise(function(resolve){
+		resolve('test', 'test2')
+	})
+	var test4 = function(){
+		p4.then(function(arg1, arg2){
+			alert(arg1 + ':' + arg2)
+		})
+	}
 	</script>
 </body>
 </html>
