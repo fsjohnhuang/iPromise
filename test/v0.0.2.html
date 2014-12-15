@@ -9,6 +9,8 @@
 	<button onclick="test2();">测试2</button>
 	<button onclick="test3();">测试3</button>
 	<button onclick="test4();">测试4</button>
+	<button onclick="test5();">测试5</button>
+	<button onclick="test6();">测试6</button>
 	<script type="text/javascript" src="../src/iPromise.js"></script>
 	<script type="text/javascript">
 	var promise = new iPromise()
@@ -85,6 +87,38 @@
 		p4.then(function(arg1, arg2){
 			alert(arg1 + ':' + arg2)
 		})
+	}
+	var p = iPromise()
+	var p4 = iPromise(function(resolve){
+		resolve('test1', 'test2')
+	}).then(function(arg1, arg2){
+			alert(arg1 + ':' + arg2)
+			p.resolve('hello', 'world')
+			return p
+		})
+	var test5 = function(){
+		p4.then(function(arg1, arg2){
+			alert(arg1 + ':' + arg2)
+		})
+	}
+	var test6 = function(){
+		var deferred = iPromise(function(resolve){
+			resolve()
+		})
+		var promise = deferred.then(function(){
+			var thenable = {
+				then: function(resolve){
+					resolve('hello', 'world')
+				}
+			}	
+			return thenable
+		})
+		// 一秒多后显示hello world
+		setTimeout(function(){
+			promise.then(function(arg1, arg2){
+				alert(arg1 + ' ' + arg2)	
+			})	
+		}, 1000)
 	}
 	</script>
 </body>

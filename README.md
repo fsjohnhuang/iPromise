@@ -1,7 +1,48 @@
-iPromise v0.0.2
+iPromise v0.0.3
 ========
 
 An implementation for promises/A+<br/>
+
+##v0.0.3
+**新特性**<Br/>
+1. 支持上一个resolveFn或rejectFn函数返回值为Promise对象时，晚绑定的resolveFn或rejectFn均可以该Promise对象作为入参被执行。<br/>
+````
+var deferred = iPromise(function(resolve){
+	resolve()
+})
+var promise = deferred.then(function(){
+	return new iPromise(function(resolve){
+		resolve('hello', 'world')
+	})	
+})
+// 一秒多后显示hello world
+setTimeout(function(){
+	promise.then(function(arg1, arg2){
+		alert(arg1 + ' ' + arg2)	
+	})	
+}, 1000)
+````
+2. 支持上一个resolveFn或rejectFn函数返回值为thenable对象时，晚绑定的resolveFn或rejectFn均可以该Promise对象作为入参被执行。<br/>
+````
+var deferred = iPromise(function(resolve){
+	resolve()
+})
+var promise = deferred.then(function(){
+	var thenable = {
+		then: function(resolve){
+			resolve('hello', 'world')
+		}
+	}	
+	return thenable
+})
+// 一秒多后显示hello world
+setTimeout(function(){
+	promise.then(function(arg1, arg2){
+		alert(arg1 + ' ' + arg2)	
+	})	
+}, 1000)
+````
+
 
 ##v0.0.2
 **全局重构，API说明**<br/>
