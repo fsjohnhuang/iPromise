@@ -62,7 +62,7 @@
 
 		return deferred
 	}
-
+	
 	iPromise.all = function(){
 		return some.apply(null, [1].concat(toArray(arguments)))
 	}
@@ -70,29 +70,42 @@
 		return some.apply(null, [0].concat(toArray(arguments)))
 	}
 
-	var some = function(isAll){
+	function some(isAll){
 		var i = 0, results = [], args
-		if (/Array|Object/.test(Object.prototype.toString.call(arguments[1])))
+		if (/Array|Object/.test(Object.prototype.toString.call(arguments[1])) && typeof arguments[1].then !== 'function')
 			args = arguments[1]
 		else
 			args = toArray(arguments, 1)
 
+		var fire4Any = false
 		var deferred = iPromise()
 		for (var p in args){
 			++i
 			results[p] = args[p]
 			;(function(p){
-				if (typeof results[p].then === 'function'){
+				if (typeof results[p].then === 'function')
 					results[p].then(function(){
-						results[p] = arguments
-
-						if (--i);else
-							deferred.resolve.apply(deferred, results)	
+						if (isAll){
+							results[p] = toArray(arguments)
+							if (--i);else
+								deferred.resolve.call(deferred, results)	
+						}
+						else if(!fire4Any){
+							fire4Any = true
+							deferred.resolve.apply(deferred,arguments)	
+						}
 					}, deferred.reject)
-				}
-				else if(!--i){
-					deferred.resolve.apply(deferred, results)	
-				}
+				else 
+					setImmediate(function(){
+						if (isAll){
+							if (--i);else
+								deferred.resolve.call(deferred, results)	
+						}
+						else if(!fire4Any){
+							fire4Any = true
+							deferred.resolve.call(deferred, results[p])	
+						}
+					})
 			}(p))
 		}
 

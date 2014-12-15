@@ -8,8 +8,56 @@ An implementation for promises/A+<br/>
 1. \#20141215 可重复添加回调函数->仅能添加一次回调函数<br/>
 
 **新特性**<br/>
-1. 新增API`iPromise.all()`<br/>
-2. 新增API`iPromise.any()`<br/>
+1. 新增API`iPromise.all([Object|Array}|...[*])`, 当所有入参均成功返回值时则执行成功回调函数<br/>
+````
+var thenable = {
+  then: function(r){
+  	setTimeout(function(){
+  		r('hi', 'there')
+  	}, 1000)
+  }
+}
+var name = 'fsjohnhuang'
+var promise1 = iPromise(function(r){
+  	setTimeout(function(){
+  		r('I\'m')
+  	}, 2000)
+})
+iPromise.all(thenable, name, promise1).then(function(arg){
+	alert(arg[0][0] + ' ' + arg[0][1] + ',' + arg[2] + ' ' + arg[1]) // 两秒多后显示hi there,I'm fsjohnhuang
+})
+iPromise.all([thenable, name, promise1]).then(function(arg){
+	alert(arg[0][0] + ' ' + arg[0][1] + ',' + arg[2] + ' ' + arg[1]) // 两秒多后显示hi there,I'm fsjohnhuang
+})
+iPromise.all({a:thenable, b:name, c:promise1}).then(function(arg){
+	alert(arg.a[0] + ' ' + arg.a[1] + ',' + arg.c + ' ' + arg.b) // 两秒多后显示hi there,I'm fsjohnhuang
+})
+````
+2. 新增API`iPromise.any([Object|Array}|...[*])`，当有一个入参成功返回时则执行成功回调函数<br/>
+````
+var thenable = {
+  then: function(r){
+  	setTimeout(function(){
+  		r('hi', 'there')
+  	}, 1000)
+  }
+}
+var name = 'fsjohnhuang'
+var promise1 = iPromise(function(r){
+  	setTimeout(function(){
+  		r('I\'m')
+  	}, 2000)
+})
+iPromise.all(thenable, name, promise1).then(function(arg){
+	alert(arg) // 显示fsjohnhuang
+})
+iPromise.all([thenable, name, promise1]).then(function(arg){
+	alert(arg) // 显示fsjohnhuang
+})
+iPromise.all({a:thenable, b:name, c:promise1}).then(function(arg){
+	alert(arg) // 显示fsjohnhuang
+})
+````
 
 
 ##v0.0.3

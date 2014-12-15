@@ -11,9 +11,11 @@
 	<button onclick="test4();">测试4</button>
 	<button onclick="test5();">测试5</button>
 	<button onclick="test6();">测试6</button>
+	<button onclick="test7();">测试7</button>
+	<button onclick="test8();">测试8</button>
 	<script type="text/javascript" src="../src/iPromise.js"></script>
 	<script type="text/javascript">
-	var promise = new iPromise()
+	/*var promise = new iPromise()
 	var test1 = function(){
 		promise.resolve('hello1')
 		promise
@@ -119,6 +121,51 @@
 				alert(arg1 + ' ' + arg2)	
 			})	
 		}, 1000)
+	}*/
+	var test7 = function(){
+		var thenable = {
+			then: function(r){
+				setTimeout(function(){
+					r('john', 'huang')
+				}, 2000)
+			}
+		}
+		var p = iPromise(function(r){
+			setTimeout(function(){
+				r('frontend')	
+			}, 3000)
+		})
+
+		var promise = iPromise.all({a:'hello', b:thenable, c:p})
+		setTimeout(function(){
+			promise.then(function(arg){
+				alert(arg.a)
+				alert(arg.b[0] + ':' + arg.b[1])
+				alert(arg.c)
+			})
+		}, 10000)
+	}
+	var test8 = function(){
+		var thenable = {
+			then: function(r){
+				setTimeout(function(){
+					r('john', 'huang')
+				}, 1000)
+			}
+		}
+		var p = iPromise(function(r){
+			setTimeout(function(){
+				r('frontend')	
+			}, 1500)
+		})
+
+		var promise = iPromise.any(thenable, p)
+		setTimeout(function(){
+			promise.then(function(arg){
+				alert(arguments[0] + '1' + arguments[1])
+			})
+		},3000)
+
 	}
 	</script>
 </body>
