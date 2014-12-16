@@ -30,7 +30,7 @@
 	console.log(JSON.stringify(v))	
 	g.next()*/
 
-var RangeIterator = function(start,end,scan){
+/*var RangeIterator = function(start,end,scan){
 	this.start = arguments.length >= 2 ? start : 0	
 	this.end = end == undefined ? start : end
 	this.scan = scan || 1
@@ -44,9 +44,13 @@ RangeIterator.prototype.next = function(){
 	return ret
 }
 var range = function(start, end, scan){
+	var ri = new RangeIterator(start, end, scan)
 	return {
 		__iterator__: function(){
-			return new RangeIterator(start, end, scan)
+			return ri
+		},
+		next: function(){
+			return ri.next()
 		},
 		toString: function(){
 			var array = []
@@ -56,9 +60,38 @@ var range = function(start, end, scan){
 		}	
 	}
 }
-var r = range(3, 5);
+var r = range(1, 100000000000000000000000000000000000);
 for (var i in r)
-	console.log(i)
+	console.log(i)*/
+
+function *getArticles(src){
+  console.log('begin')
+  var data = yield getData()
+  var tpl = yield getTpl(data.tpl)
+  var res = render(data, tpl)
+  console.log(res)
+}
+var iterator = getArticles('dummy.json')
+function getData(){
+  setTimeout(function(){
+    iterator.next({tpl: 'tpl.html', name: 'fsjohnhuang'})
+  }, 1000)
+}
+function getTpl(tpl){
+  setTimeout(function(){
+    iterator.next('hello ${name}')
+  }, 3000)
+}
+function render(data, tpl){
+  return tpl.replace(/\$\{(\w+)\}/, function(){
+    return data[arguments[1]] ==  void 0 ? arguments[0] : data[arguments[1]]
+  })
+}
+
+// 开始执行
+iterator.next()
+//r = range(3, 5);
+//for (var item = r.next(); item != void 0; item = r.next()) console.log(item)
 
 /*function Range(low, high){
   this.low = low;
