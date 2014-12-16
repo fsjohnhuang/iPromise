@@ -1,7 +1,11 @@
-iPromise v0.0.4
+iPromise v0.0.5
 ========
 
 An implementation for promises/A+<br/>
+
+##v0.0.5
+**新特性**<br/>
+1. 新增`{Promise} wait({number} ms)`和`{Promise} iPromise.wait({number} ms)`，等待ms毫秒在执行后续的回调函数，此方法不会改变Deferred实例状态和责任链传递的值。<br/>
 
 ##v0.0.4
 **bug修复**<br/>

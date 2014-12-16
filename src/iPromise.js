@@ -1,10 +1,10 @@
 /*!
  * An implementation for Promises/A+
  * @author fsjohnhuang
- * @version v0.0.4
+ * @version v0.0.5
  */
 ;(function(exports, undefined){
-	var version = '0.0.4'
+	var version = '0.0.5'
 
 	var iPromise = exports.iPromise = function(mixin){
 		var state = {
@@ -41,6 +41,7 @@
 				return post(state, 0, 0, 0, finallyFn)
 			}
 		}
+		deferred.wait = defnWait(deferred)
 
 		configTuple.each(1, function(method, i){
 			deferred[method] = function (){
@@ -69,6 +70,8 @@
 	iPromise.any = function(){
 		return some.apply(null, [0].concat(toArray(arguments)))
 	}
+
+	iPromise.wait = defnWait()
 
 	function some(isAll){
 		var i = 0, results = [], args
@@ -112,6 +115,45 @@
 		return deferred.then()
 	}
 
+	/**
+	 * 创建wait函数
+	 * @param {Deferred} [deferred] Deferred实例
+	 * @param {Function}
+	 */
+	function defnWait(deferred){
+		return function(ms){
+			ms = ms || 0	
+			if (!deferred) 
+				return iPromise(function(r){
+					setTimeout(r, ms)
+				}).then()
+
+			return deferred.then(function(){
+				return createThenable4Wait(0, ms, arguments)
+			}, function(){
+				return createThenable4Wait(1, ms, arguments)
+			}, function(){
+				return createThenable4Wait(2, ms, arguments)
+			})
+		}
+	}	
+	/**
+	 * 生成供wait函数使用的thenable实例
+	 * @param {Number} methodIndex 方法索引，0:resolve,1:reject,2:notify
+	 * @param {Number} ms 等待的毫秒数
+	 * @param {ArrayLike} args
+	 */
+	function createThenable4Wait(methodIndex, ms, args){
+		return {
+			then: function(){
+				var methods = arguments
+				setTimeout(function(){
+					methods[methodIndex].apply(null, args)
+				}, ms)
+			}
+		}	
+	}
+
 	var post = function(state /*...[Function]*/){
 		// fix: #20141215
 		if (state.dirty) return state.curr
@@ -138,7 +180,7 @@
 		})
 
 		state.next = iPromise()
-		var promise = extend({}, state.next, 'then catch progress finally')
+		var promise = extend({}, state.next, 'then catch progress finally wait')
 
 		// 若Deferred实例状态为fulfilled或rejected则调用对应的回调函数
 		var tuple = configTuple.find(state.status)
@@ -177,7 +219,9 @@
 	 * @return {Array}
 	 */
 	var toArray = function(arrayLike, startIdx){
-		if (arrayLike == undefined || !('length' in arrayLike)) return [arrayLike]
+		if (arrayLike == undefined 
+			|| typeof arrayLike !== 'object'
+			|| !('length' in arrayLike)) return [arrayLike]
 
 		try{
 			return [].slice.call(arrayLike, startIdx)

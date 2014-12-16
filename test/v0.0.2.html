@@ -13,6 +13,7 @@
 	<button onclick="test6();">测试6</button>
 	<button onclick="test7();">测试7</button>
 	<button onclick="test8();">测试8</button>
+	<button onclick="test9();">测试9</button>
 	<script type="text/javascript" src="../src/iPromise.js"></script>
 	<script type="text/javascript">
 	/*var promise = new iPromise()
@@ -166,6 +167,13 @@
 			})
 		},3000)
 
+	}
+	var test9 = function(){
+		var d = iPromise(function(r, rr,n){n('test')})
+		c= d.wait(1000).then(function(v){
+			alert(v)
+			return 'cd'
+		}).wait(2000).progress(function(v){console.log(v)})
 	}
 	</script>
 </body>
