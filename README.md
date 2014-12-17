@@ -1,7 +1,32 @@
-iPromise v0.0.5
+iPromise v0.0.6
 ========
 
 An implementation for promises/A+<br/>
+
+##v0.0.6
+**新特性**<br/>
+1. `iPromise`构造器接受ES6的Generator Function。<br/>
+````
+var getData = function(){
+  return iPromise(function(r){
+  	setTimeout(function(){
+  		r('data')
+  	}, 1000)
+  })
+}
+var getTpl = function(){
+  return iPromise(function(r){
+  	setTimeout(function(){
+  		r('tpl')
+  	}, 1000)
+  })
+}
+iPromise(function *(){
+  var data = yield getData()
+  var tpl = yield getTpl()
+  render(data, tpl)
+})
+````
 
 ##v0.0.5
 **新特性**<br/>

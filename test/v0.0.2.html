@@ -14,6 +14,7 @@
 	<button onclick="test7();">测试7</button>
 	<button onclick="test8();">测试8</button>
 	<button onclick="test9();">测试9</button>
+	<button onclick="test10();">测试10</button>
 	<script type="text/javascript" src="../src/iPromise.js"></script>
 	<script type="text/javascript">
 	/*var promise = new iPromise()
@@ -174,6 +175,28 @@
 			alert(v)
 			return 'cd'
 		}).wait(2000).progress(function(v){console.log(v)})
+	}
+	var test10 = function(){
+		var getData = function(val){
+			return iPromise(function(r){
+				setTimeout(function(){
+					throw new Error()
+					r(val+1)
+				}, 2000)	
+			})
+		}
+		iPromise(function*(a,b,c){
+			console.log('start')	
+			console.log(a + ' ' + b + ' ' + c)	
+			try{
+				var val = yield getData(a+b+c)
+			}
+			catch(e){
+				console.log(e)		
+			}
+			console.log(val)
+			console.log('end')
+		},1,2,3)
 	}
 	</script>
 </body>
