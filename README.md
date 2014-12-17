@@ -4,28 +4,47 @@ iPromise v0.0.6
 An implementation for promises/A+<br/>
 
 ##v0.0.6
+**bug修复**<br/>
+1. \#20141217 `iPromise({Function} mixin)`，没有捕获mixin内部抛出同步异常->捕获mixin内部抛出同步异常，并将异常信息所谓入参调用deferred实例的reject函数。<br/>
+2. `iPromise({Function|Object} mixin?)`，若mixin为Object，则返回的为deferred实例，若mixin为Function，则返回的是Promise实例。<br/>
 **新特性**<br/>
-1. `iPromise`构造器接受ES6的Generator Function。<br/>
+1. `iPromise`构造器接受ES6的Generator Function。并返回undefined<br/>
 ````
-var getData = function(){
+var getData = function(dataSrc){
   return iPromise(function(r){
   	setTimeout(function(){
-  		r('data')
+  		r(dataSrc + ' has loaded')
   	}, 1000)
   })
 }
-var getTpl = function(){
+var getTpl = function(tplSrc){
   return iPromise(function(r){
   	setTimeout(function(){
-  		r('tpl')
-  	}, 1000)
+  		r(tplStr + ' has loaded')
+  	}, 2000)
   })
 }
-iPromise(function *(){
-  var data = yield getData()
-  var tpl = yield getTpl()
-  render(data, tpl)
-})
+var render = function(data, tpl){
+	throw new Error('OMG!')
+}
+iPromise(function *(dataSrc, tplSrc){
+  try{
+  	var data = yield getData(dataSrc)
+  	var tpl = yield getTpl(tplSrc)
+  	render(data, tpl)
+  }
+  catch(e){
+  	console.log(e)
+  }
+  console.log('over!')
+}, 'dummyData.json', 'dummyTpl.json')
+/* 结果如下 */
+// 等待1秒多显示 dummyData.json has loaded
+// 等待2秒多显示 dummyTpl.json has loaded
+// 显示 Error: OMG!
+//     Stack trace:
+//     test10/render/</<@file:///home/fsjohnhuang/repos/iPromise/test/v0.0.2.html:190:6
+// 显示 over!
 ````
 
 ##v0.0.5

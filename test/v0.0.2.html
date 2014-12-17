@@ -177,11 +177,17 @@
 		}).wait(2000).progress(function(v){console.log(v)})
 	}
 	var test10 = function(){
-		var getData = function(val){
-			return iPromise(function(r){
+		var getData1 = function(val){
+			return iPromise(function(r,reject){
 				setTimeout(function(){
-					throw new Error()
-					r(val+1)
+					r(1)
+				}, 2000)	
+			})
+		}
+		var getData = function(val){
+			return iPromise(function(r,reject){
+				setTimeout(function(){
+					reject(new Error('test'))
 				}, 2000)	
 			})
 		}
@@ -189,7 +195,10 @@
 			console.log('start')	
 			console.log(a + ' ' + b + ' ' + c)	
 			try{
-				var val = yield getData(a+b+c)
+				var s = yield getData1()
+				console.log(s)
+				var val = yield getData(s)
+				console.log('test')
 			}
 			catch(e){
 				console.log(e)		

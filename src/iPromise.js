@@ -53,17 +53,24 @@
 						setImmediate(fire, state, i, arguments)
 				}
 		})	
-
-		var isGenFn = false;
+		
+		var isGenFn = false, ret = deferred;
 		if (mixin != undefined)
 			if (typeof mixin === 'function')
 				if (isGenFn = mixin.isGenerator && mixin.isGenerator() || Object.prototype.toString.call(mixin) === '[object GeneratorFunction]');else
-					mixin.apply(null, extend([], deferred, configTuple.stringify(1, ' ')))
+					// #20141217
+					try{
+						ret = deferred.then()
+						mixin.apply(null, extend([], deferred, configTuple.stringify(1, ' ')))
+					}
+					catch(e){
+						deferred.reject(e)
+					}
 			else
 				for (var p in mixin) if (p in deferred);else
 					deferred[p] = mixin[p]
 
-		// mixin为生成器函数时，返回undefined
+		// mixin为生成器函数时，进行特殊处理并返回undefined
 		if (isGenFn){
 			// FF下生成器函数的入参必须在创建迭代器时传递
 			// 若第一次调用迭代器的next函数传递参数，则会报TypeError: attempt to send 第一个入参值 to newborn generator
@@ -77,13 +84,15 @@
 						if(yieldReturn.done) throw Error('StopIteration')
 						
 						return yieldReturn.value
-					}).then(next)
+					}).then(next, function(e){
+						iterator.throw(e)
+					})
 			}
 			deferred.resolve()
 			deferred.then(next)
 		}
 		else{
-			return deferred
+			return ret 
 		}
 	}
 	
