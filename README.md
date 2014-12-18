@@ -5,7 +5,7 @@ An implementation for promises/A+<br/>
 
 ##v0.0.6
 **bug修复**<br/>
-1. \#20141217 `iPromise({Function} mixin)`，没有捕获mixin内部抛出同步异常->捕获mixin内部抛出同步异常，并将异常信息所谓入参调用deferred实例的reject函数。<br/>
+1. \#20141217 `iPromise({Function} mixin)`，没有捕获mixin内部抛出同步异常->捕获mixin内部抛出同步异常，并将异常信息作为入参调用deferred实例的reject函数。<br/>
 2. `iPromise({Function|Object} mixin?)`，若mixin为Object，则返回的为deferred实例，若mixin为Function，则返回的是Promise实例。<br/>
 **新特性**<br/>
 1. `iPromise`构造器接受ES6的Generator Function。并返回undefined<br/>
