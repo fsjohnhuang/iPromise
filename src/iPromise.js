@@ -1,10 +1,10 @@
 /*!
  * An implementation for Promises/A+
  * @author fsjohnhuang
- * @version v0.0.6
+ * @version v0.6.0
  */
 ;(function(exports, undefined){
-	var version = '0.0.6'
+	var VERSION = '0.6.0'
 
 	var iPromise = exports.iPromise = function(mixin){
 		var state = {
