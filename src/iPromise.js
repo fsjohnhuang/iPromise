@@ -1,10 +1,10 @@
 /*!
  * An implementation for Promises/A+
  * @author fsjohnhuang
- * @version v0.0.5
+ * @version v0.0.6
  */
 ;(function(exports, undefined){
-	var version = '0.0.5'
+	var version = '0.0.6'
 
 	var iPromise = exports.iPromise = function(mixin){
 		var state = {
@@ -53,15 +53,49 @@
 						setImmediate(fire, state, i, arguments)
 				}
 		})	
-
+		
+		var isGenFn = false, ret = deferred;
 		if (mixin != undefined)
 			if (typeof mixin === 'function')
-				mixin.apply(null, extend([], deferred, configTuple.stringify(1, ' ')))
+				if (isGenFn = mixin.isGenerator && mixin.isGenerator()
+						// #2014121702: chrome下判断生成器函数失败
+						|| /^\s*function\s+GeneratorFunction\(\s*\)\s*\{\s*\[\s*native/.test(mixin.constructor));else
+					// #2014121701: 没有捕获mixin内部抛出同步异常->捕获mixin内部抛出同步异常
+					try{
+						ret = deferred.then()
+						mixin.apply(null, extend([], deferred, configTuple.stringify(1, ' ')))
+					}
+					catch(e){
+						deferred.reject(e)
+					}
 			else
 				for (var p in mixin) if (p in deferred);else
 					deferred[p] = mixin[p]
 
-		return deferred
+		// mixin为生成器函数时，进行特殊处理并返回undefined
+		if (isGenFn){
+			// FF下生成器函数的入参必须在创建迭代器时传递
+			// 若第一次调用迭代器的next函数传递参数，则会报TypeError: attempt to send 第一个入参值 to newborn generator
+			var iterator = mixin.apply(null, toArray(arguments,1))
+			var next = function(){
+				var deferred = iPromise()
+				deferred.resolve.apply(deferred, arguments)
+
+				return deferred.then(function(){
+						var yieldReturn = iterator.next.apply(iterator, arguments)
+						if(yieldReturn.done) throw Error('StopIteration')
+						
+						return yieldReturn.value
+					}).then(next, function(e){
+						iterator.throw(e)
+					})
+			}
+			deferred.resolve()
+			deferred.then(next)
+		}
+		else{
+			return ret 
+		}
 	}
 	
 	iPromise.all = function(){
