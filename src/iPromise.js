@@ -57,8 +57,10 @@
 		var isGenFn = false, ret = deferred;
 		if (mixin != undefined)
 			if (typeof mixin === 'function')
-				if (isGenFn = mixin.isGenerator && mixin.isGenerator() || Object.prototype.toString.call(mixin) === '[object GeneratorFunction]');else
-					// #20141217
+				if (isGenFn = mixin.isGenerator && mixin.isGenerator()
+						// #2014121702: chrome下判断生成器函数失败
+						|| /^\s*function\s+GeneratorFunction\(\s*\)\s*\{\s*\[\s*native/.test(mixin.constructor));else
+					// #2014121701: 没有捕获mixin内部抛出同步异常->捕获mixin内部抛出同步异常
 					try{
 						ret = deferred.then()
 						mixin.apply(null, extend([], deferred, configTuple.stringify(1, ' ')))
