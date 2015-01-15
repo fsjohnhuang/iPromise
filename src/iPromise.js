@@ -1,10 +1,10 @@
 /*!
  * An implementation for Promises/A+
  * @author fsjohnhuang
- * @version v0.0.6
+ * @version v0.6.1
  */
 ;(function(exports, undefined){
-	var version = '0.0.6'
+	var version = '0.6.1'
 
 	var iPromise = exports.iPromise = function(mixin){
 		var state = {
@@ -28,17 +28,14 @@
 		}
 
 		var deferred = state.curr = {
-			then: function(fulfilledFn, rejectedFn, progressFn, finallyFn){
-				return post(state, fulfilledFn, rejectedFn, progressFn, finallyFn)
+			then: function(fulfilledFn, rejectedFn, finallyFn){
+				return post(state, fulfilledFn, rejectedFn, 0, finallyFn)
 			},
-			catch: function(rejectedFn){
-				return post(state, 0, rejectedFn)
+			catch: function(rejectedFn, finallyFn){
+				return post(state, 0, rejectedFn, 0, finallyFn)
 			},
 			progress: function(progressFn){
-				return post(state, 0, 0, progressFn)
-			},
-			finally: function(finallyFn){
-				return post(state, 0, 0, 0, finallyFn)
+				return post(state, 0, 0, progressFn, finallyFn)
 			}
 		}
 		deferred.wait = defnWait(deferred)

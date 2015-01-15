@@ -1,0 +1,32 @@
+{
+  "name": "iPromise",
+  "version": "0.6.1",
+  "description": "An implementation of Promises/A+",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fsjohnhuang/iPromise.git"
+  },
+  "keywords": [
+    "Promises/A+",
+    "deferred"
+  ],
+  "author": {
+    "name": "fsjohnhuang",
+    "url": "fsjohnhuang.cnblogs.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fsjohnhuang/iPromise/issues"
+  },
+  "homepage": "https://github.com/fsjohnhuang/iPromise",
+  "devDependencies": {
+    "blanket": "^1.1.6",
+    "chai": "^1.10.0"
+  }
+}

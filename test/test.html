@@ -1,131 +1,21 @@
-<!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="content=-type" content"text/html;charset=utf-8">
-	<title></title>
+	<title>iPromise Tests</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="../node_modules/mocha/mocha.css"/>
 </head>
 <body>
-	<script type="text/javascript">
-	var say = function *(msg){
-		console.log(msg)
-		var res = yield msg
-		console.log(res)
-		res = yield res
-		console.log(res)
-	}
-	/*var NOTFOUND = 'function is not found'
-	console.log(say.toString())
-	console.log(say.toSource ? say.toSource() : NOTFOUND)
-	console.log(say.constructor)
-	console.log(typeof say)
+  <div id="mocha"></div>
 
-	var g = say("hello")
-	console.log(g.toString())
+  <script type="text/javascript" src="../src/iPromise.js"></script>
+  <script type="text/javascript" src="../node_modules/mocha/mocha.js"></script>
+  <script type="text/javascript" src="../node_modules/chai/chai.js"></script>
+  <script type="text/javascript">mocha.setup({ui:'bdd'})</script>
+  <script type="text/javascript" src="iPromiseSpec.js"></script>
 
-	var v = g.next()
-	console.log(JSON.stringify(v))	
-	v = g.next('ladies')
-	console.log(JSON.stringify(v))	
-	v = g.next('and gentlemen')
-	console.log(JSON.stringify(v))	
-	g.next()*/
-
-/*var RangeIterator = function(start,end,scan){
-	this.start = arguments.length >= 2 ? start : 0	
-	this.end = end == undefined ? start : end
-	this.scan = scan || 1
-	this.idx = this.start
-}
-RangeIterator.prototype.next = function(){
-	if (this.idx > this.end) throw StopIteration
-
-	var ret = this.idx
-	this.idx += this.scan
-	return ret
-}
-var range = function(start, end, scan){
-	var ri = new RangeIterator(start, end, scan)
-	return {
-		__iterator__: function(){
-			return ri
-		},
-		next: function(){
-			return ri.next()
-		},
-		toString: function(){
-			var array = []
-			for (var p in this) if(typeof p === 'number')
-				array.push(p)
-			return array + ''
-		}	
-	}
-}
-var r = range(1, 100000000000000000000000000000000000);
-for (var i in r)
-	console.log(i)*/
-
-function *getArticles(src){
-  console.log('begin')
-  var data = yield getData()
-  var tpl = yield getTpl(data.tpl)
-  var res = render(data, tpl)
-  console.log(res)
-}
-var iterator = getArticles('dummy.json')
-function getData(){
-  setTimeout(function(){
-    iterator.next({tpl: 'tpl.html', name: 'fsjohnhuang'})
-  }, 1000)
-}
-function getTpl(tpl){
-  setTimeout(function(){
-    iterator.next('hello ${name}')
-  }, 3000)
-}
-function render(data, tpl){
-  return tpl.replace(/\$\{(\w+)\}/, function(){
-    return data[arguments[1]] ==  void 0 ? arguments[0] : data[arguments[1]]
-  })
-}
-
-// 开始执行
-iterator.next()
-//r = range(3, 5);
-//for (var item = r.next(); item != void 0; item = r.next()) console.log(item)
-
-/*function Range(low, high){
-  this.low = low;
-  this.high = high;
-}
-function RangeIterator(range){
-  this.range = range;
-  this.current = this.range.low;
-}
-RangeIterator.prototype.next = function(){
-  if (this.current > this.range.high)
-    throw StopIteration;
-  else
-    return this.current++;
-};
-Range.prototype.__iterator__ = function(){
-  return new RangeIterator(this);
-};
-var s = {
-	__iterator__: function(){
-	  return new RangeIterator({
-		  low : 3,
-		  high : 5
-	  })
-	},
-	toString: function(){
-			var array = []
-			for (var p in this) if(typeof p === 'number')
-				array.push(p)
-			return array + ''
-	}
-}
-for (var i in s)
-  console.log(i); // prints 3, then 4, then 5 in sequence*/
-	</script>
+  <script type="text/javascript">
+  	mocha.checkLeaks()
+  	mocha.run()
+  </script>
 </body>
 </html>
