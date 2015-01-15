@@ -1,9 +1,14 @@
-iPromise v0.0.6
+iPromise v0.6.1
 ========
 
 An implementation for promises/A+<br/>
 
-##v0.0.6
+##v0.6.1
+添加mocha、chai作为单元测试套件<br/>
+添加blanket作为覆盖率测试库<br/>
+添加npm作为依赖管理工具<br/>
+
+##v0.6.0
 **bug修复**<br/>
 1. \#20141217 `iPromise({Function} mixin)`，没有捕获mixin内部抛出同步异常->捕获mixin内部抛出同步异常，并将异常信息作为入参调用deferred实例的reject函数。<br/>
 2. `iPromise({Function|Object} mixin?)`，若mixin为Object，则返回的为deferred实例，若mixin为Function，则返回的是Promise实例。<br/>
@@ -47,11 +52,11 @@ iPromise(function *(dataSrc, tplSrc){
 // 显示 over!
 ````
 
-##v0.0.5
+##v0.5.0
 **新特性**<br/>
 1. 新增`{Promise} wait({number} ms)`和`{Promise} iPromise.wait({number} ms)`，等待ms毫秒在执行后续的回调函数，此方法不会改变Deferred实例状态和责任链传递的值。<br/>
 
-##v0.0.4
+##v0.4.0
 **bug修复**<br/>
 1. \#20141215 可重复添加回调函数->仅能添加一次回调函数<br/>
 
@@ -108,7 +113,7 @@ iPromise.all({a:thenable, b:name, c:promise1}).then(function(arg){
 ````
 
 
-##v0.0.3
+##v0.3.0
 **新特性**<Br/>
 1. 支持上一个resolveFn或rejectFn函数返回值为Promise对象时，晚绑定的resolveFn或rejectFn均可以该Promise对象作为入参被执行。<br/>
 ````
@@ -149,7 +154,7 @@ setTimeout(function(){
 ````
 
 
-##v0.0.2
+##v0.2.0
 **全局重构，API说明**<br/>
 1. `{Deferred} [new] iPromise({Object|Function<this:null,{Function} resovle, {Function} reject, {Function} notify>})`，构造Deferred实例，入参为Object类型时则将入参的属性和方法附加到返回的Deferred实例上，若入参为函数则可在函数体内调用resolve、reject或notify方法触发调用Deferred实例的回调函数的请求。<br/>
 2. `{Promise} then({Function} resolveFn?, {Function} rejectFn?, {Function} progressFn?, {Function} finally?)`，向Deferred实例添加四类回调函数。<br/>
@@ -175,7 +180,7 @@ setTimeout(function(){
 }, 1000)
 ````
 
-##v0.0.1
+##v0.1.0
 实现基础接口API<br/>
 1. `new iPromise([fn(resolve, reject)])`，构造promise实例，可传入一个带resolve函数、reject函数的入参方法。<br/>
 2. `then([{Function} fulfilledHandler[, {Function} rejectedHandler]])`，重写fulfilled和rejected回调。<br/>
