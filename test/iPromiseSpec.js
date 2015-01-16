@@ -44,9 +44,16 @@ describe('iPromise', function(){
 				}).then(done, done)
 				promise.resolve.apply(null, arg)
 			})
-			it('expect resolve({ipromise} promise) to be instanceof ipromise', function(done){
-				arg = ipromise(), expval = ipromise
-
+			it('expect iPromise() to be instanceof iPromise', function(){
+				arg = iPromise(), expval = iPromise
+				expect(arg).to.be.an.instanceof(expval)
+			})
+			it('expect iPromise().then() to be instanceof iPromise', function(){
+				arg = iPromise().then(function(){}, function(){}), expval = iPromise
+				expect(arg).to.be.an.instanceof(expval)
+			})
+			it('expect resolve({iPromise} val) to be instanceof iPromise', function(done){
+				arg = iPromise(), expval = iPromise
 				promise.then(function(val){
 					expect(val).to.be.an.instanceof(expval)
 				}).then(done, done)
@@ -117,12 +124,12 @@ describe('iPromise', function(){
 				}).then(done, done)
 				promise.resolve(arg)
 			})
-			it('expect resolve(1) to be 3 by return ipromise instance', function(done){
+			it('expect resolve(1) to be 3 by return iPromise instance', function(done){
 				arg = 1, expval = 3
 
 				promise
 					.then(function(val){
-						var p = ipromise(function(r){
+						var p = iPromise(function(r){
 							r(val + 1)
 						})
 						return p
@@ -257,16 +264,16 @@ describe('iPromise', function(){
 				}).then(done, done)
 				promise.reject.apply(null, arg)
 			})
-			it('expect ({ipromise} promise) to be instanceof ipromise sub by catch', function(done){
-				arg = ipromise(), expval = ipromise
+			it('expect ({iPromise} promise) to be instanceof iPromise sub by catch', function(done){
+				arg = iPromise(), expval = iPromise
 
 				promise.catch(function(val){
 					expect(val).to.be.an.instanceof(expval)
 				}).then(done, done)
 				promise.reject(arg)
 			})
-			it('expect ({ipromise} promise) to be instanceof ipromise sub by then', function(done){
-				arg = ipromise(), expval = ipromise
+			it('expect ({iPromise} promise) to be instanceof iPromise sub by then', function(done){
+				arg = iPromise(), expval = iPromise
 
 				promise.then({}, function(val){
 					expect(val).to.be.an.instanceof(expval)
@@ -387,7 +394,7 @@ describe('iPromise', function(){
 				}).then(done, done)
 				promise.reject(arg)
 			})
-			it('expect (1) to be 3 by return ipromise instance sub by catch', function(done){
+			it('expect (1) to be 3 by return iPromise instance sub by catch', function(done){
 				arg = 1, expval = 3
 
 				promise
@@ -405,7 +412,7 @@ describe('iPromise', function(){
 					}).then(done, done)
 				promise.reject(arg)
 			})
-			it('expect (1) to be 3 by return ipromise instance sub by then', function(done){
+			it('expect (1) to be 3 by return iPromise instance sub by then', function(done){
 				arg = 1, expval = 3
 
 				promise
@@ -473,12 +480,12 @@ describe('iPromise', function(){
 				},done).then(done, done)
 				promise.resolve()
 			})
-			it('would be called when invokes resolve() without fulfilled function', function(done){
+			it('won\'t be called when invokes resolve() without fulfilled function', function(done){
 				var isCalled = false 
 				promise.then(null, null, function(){
 					isCalled = true
 				}).then(function(){
-					expect(isCalled).to.be.true()
+					expect(isCalled).to.be.false()
 				}).then(done, done)
 				promise.resolve()
 			})
@@ -493,12 +500,12 @@ describe('iPromise', function(){
 				},done).then(done, done)
 				promise.reject()
 			})
-			it('would be called when invokes reject() without rejected function', function(done){
+			it('won\'t be called when invokes reject() without rejected function', function(done){
 				var isCalled = false 
 				promise.then(null, null, function(){
 					isCalled = true
 				}).then(function(){
-					expect(isCalled).to.be.true()
+					expect(isCalled).to.be.false()
 				}).then(done, done)
 				promise.resolve()
 			})
@@ -548,11 +555,11 @@ describe('iPromise', function(){
 		beforeEach(function(){
 			a = 1
 			b = iPromise(function(r){
-				setTimeout(function(){r(2)}, 1000)
+				setTimeout(function(){r(2)}, 200)
 			})
 			c = {
 				then: function(r){
-					setTimeout(function(){r(3)}, 1500)
+					setTimeout(function(){r(3)}, 600)
 				}
 			}
 		})
@@ -560,7 +567,7 @@ describe('iPromise', function(){
 			var curr, o = +new Date()	
 			iPromise.all(a,b,c).then(function(val){
 				curr = +new Date()
-				expect(curr - o).to.be.least(1500)
+				expect(curr - o).to.be.least(600)
 				expect(val).to.be.an.instanceOf(Array)
 				expect(val).to.have.property('length', 3)
 				expect(val[0]).to.be.equal(1)
@@ -574,7 +581,7 @@ describe('iPromise', function(){
 				return val
 			}).then(function(val){
 				curr = +new Date()
-				expect(curr - o).to.be.least(1500)
+				expect(curr - o).to.be.least(600)
 				expect(val).to.be.an.instanceOf(Array)
 				expect(val).to.have.property('length', 3)
 				expect(val[0]).to.be.equal(1)
@@ -586,7 +593,7 @@ describe('iPromise', function(){
 			var curr, o = +new Date()	
 			iPromise.all([a,b,c]).then(function(val){
 				curr = +new Date()
-				expect(curr - o).to.be.least(1500)
+				expect(curr - o).to.be.least(600)
 				expect(val).to.be.an.instanceOf(Array)
 				expect(val).to.have.property('length', 3)
 				expect(val[0]).to.be.equal(1)
@@ -600,7 +607,7 @@ describe('iPromise', function(){
 				return val
 			}).then(function(val){
 				curr = +new Date()
-				expect(curr - o).to.be.least(1500)
+				expect(curr - o).to.be.least(600)
 				expect(val).to.be.an.instanceOf(Array)
 				expect(val).to.have.property('length', 3)
 				expect(val[0]).to.be.equal(1)
@@ -612,7 +619,7 @@ describe('iPromise', function(){
 			var curr, o = +new Date()	
 			iPromise.all({a:a,b:b,c:c}).then(function(val){
 				curr = +new Date()
-				expect(curr - o).to.be.least(1500)
+				expect(curr - o).to.be.least(600)
 				expect(val).to.be.not.an.instanceOf(Array)
 				expect(val).to.have.property('a')
 					.that.equals(1)
@@ -628,7 +635,7 @@ describe('iPromise', function(){
 				return val
 			}).then(function(val){
 				curr = +new Date()
-				expect(curr - o).to.be.least(1500)
+				expect(curr - o).to.be.least(600)
 				expect(val).to.be.not.an.instanceOf(Array)
 				expect(val).to.have.property('a')
 					.that.equals(1)

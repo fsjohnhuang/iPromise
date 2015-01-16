@@ -1,14 +1,59 @@
-iPromise v0.6.1
+iPromise v0.7.0
 ========
 
 An implementation for promises/A+<br/>
 
-##v0.6.1
+###In This Documentation
+1. Getting Started
+2. Usage
+3. API
+
+## Getting Started
+###1.Include iPromise on your site.
+Compiled and production-ready code can be found in the `dist` directory.Then `src` directory contains development code. Unit tests are located in the `test` directory.
+````
+<script src="dist/js/iPromise.js"></script>
+````
+## Usage
+###1.Sample1
+````
+<script>
+  iPromise(function(resolve, reject){
+    setTimeout(1000, resolve, 'hello world')
+  }).then(function(val){
+    console.log(val) // 'hello world'
+  })
+</script>
+````
+###2.Sample2
+````
+<script>
+  iPromise.
+</script>
+````
+## API
+###1. `iPromise`
+
+
+##Changelog
+###v0.7.0
+**全局重构**<br/>
+**新增**<br/>
+1. utils模块，将原来位于iPromise模块中的辅助函数迁移到utils模块中。<br/>
+**修改**<b/>
+1. `then({Function} fulfilledFn,{Function} rejectedFn,{Function} progressFn,{Function} finallyFn)`-->`then({Function} fulfilledFn,{Function} rejectedFn,{Function} finallyFn)`<br/>
+2. `catch({Function} rejectedFn)`-->`catch({Function} rejectedFn,{Function} finallyFn)`<br/>
+3. `iPromise.wait({Number} ms)`-->`iPromise.wait({Number} ms/*, ...args*/)`<br/>
+**删除**<br/>
+1. `notify()`<br/>
+2. `finally()`<br/>
+
+###v0.6.1
 添加mocha、chai作为单元测试套件<br/>
 添加blanket作为覆盖率测试库<br/>
 添加npm作为依赖管理工具<br/>
 
-##v0.6.0
+###v0.6.0
 **bug修复**<br/>
 1. \#20141217 `iPromise({Function} mixin)`，没有捕获mixin内部抛出同步异常->捕获mixin内部抛出同步异常，并将异常信息作为入参调用deferred实例的reject函数。<br/>
 2. `iPromise({Function|Object} mixin?)`，若mixin为Object，则返回的为deferred实例，若mixin为Function，则返回的是Promise实例。<br/>
@@ -52,11 +97,11 @@ iPromise(function *(dataSrc, tplSrc){
 // 显示 over!
 ````
 
-##v0.5.0
+###v0.5.0
 **新特性**<br/>
 1. 新增`{Promise} wait({number} ms)`和`{Promise} iPromise.wait({number} ms)`，等待ms毫秒在执行后续的回调函数，此方法不会改变Deferred实例状态和责任链传递的值。<br/>
 
-##v0.4.0
+###v0.4.0
 **bug修复**<br/>
 1. \#20141215 可重复添加回调函数->仅能添加一次回调函数<br/>
 
@@ -113,7 +158,7 @@ iPromise.all({a:thenable, b:name, c:promise1}).then(function(arg){
 ````
 
 
-##v0.3.0
+###v0.3.0
 **新特性**<Br/>
 1. 支持上一个resolveFn或rejectFn函数返回值为Promise对象时，晚绑定的resolveFn或rejectFn均可以该Promise对象作为入参被执行。<br/>
 ````
@@ -154,7 +199,7 @@ setTimeout(function(){
 ````
 
 
-##v0.2.0
+###v0.2.0
 **全局重构，API说明**<br/>
 1. `{Deferred} [new] iPromise({Object|Function<this:null,{Function} resovle, {Function} reject, {Function} notify>})`，构造Deferred实例，入参为Object类型时则将入参的属性和方法附加到返回的Deferred实例上，若入参为函数则可在函数体内调用resolve、reject或notify方法触发调用Deferred实例的回调函数的请求。<br/>
 2. `{Promise} then({Function} resolveFn?, {Function} rejectFn?, {Function} progressFn?, {Function} finally?)`，向Deferred实例添加四类回调函数。<br/>
@@ -180,14 +225,14 @@ setTimeout(function(){
 }, 1000)
 ````
 
-##v0.1.0
+###v0.1.0
 实现基础接口API<br/>
 1. `new iPromise([fn(resolve, reject)])`，构造promise实例，可传入一个带resolve函数、reject函数的入参方法。<br/>
 2. `then([{Function} fulfilledHandler[, {Function} rejectedHandler]])`，重写fulfilled和rejected回调。<br/>
 3. `resolve([{Any} data])`，promise实例方法，用于触发fulfilled回调。<br/>
 4. `reject([{Any} data])`，promise实例方法，用于触发rejected回调。<br/>
 
-##参考
+##Referrence
 [prmises/A+](https://promisesaplus.com/)<br/>
 [prmises/A](https://www.promisejs.org/)<br/>
 [JavaScript异步编程的模式](http://javascript.ruanyifeng.com/advanced/asynchronous.html)<br/>
