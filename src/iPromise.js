@@ -10,7 +10,7 @@
 	 * 配置信息
 	 * @private
 	 * @readonly
-	 * @type {Tuple.<Tuple.<String>>}
+	 * @type {Array.<Array.<string>>}
 	 */
 	var configTuples = [
 		['fulfilled', 'resolve'],
@@ -32,15 +32,15 @@
 
 	/**
 	 * iPromise的状态
-	 * @enum {String}
+	 * @enum {string}
 	 */
 	var STATUS = {pending: 0, fulfilled: 1, rejected: 2}
 
 	/**
 	 * iPromise构造函数
 	 * @public
-	 * @param  {Function|Generator Function} mixin 工厂函数 或 Generator Function
-	 * @return {iPromise}       
+	 * @param  {(Function|GeneratorFunction)} [mixin] - 工厂函数 或 Generator Function
+	 * @return {?iPromise}       
 	 */
 	var iPromise = exports.iPromise = function(mixin){
 		var state = {
@@ -132,29 +132,30 @@
 	/**
 	 * 等待所有条件成立才执行后续的fulfilled事件处理函数
 	 * @method iPromise.all
-	 * @public
-	 * @param {*} ...args 条件集合，入参形式有三种：1.(a,b,c);2.([a,b,c]);3.({a:a,b:b,c:c})
+	 * @static
+	 * @param {...*} arg - 条件集合，入参形式有三种：1.(a,b,c);2.([a,b,c]);3.({a:a,b:b,c:c})
 	 * @return {iPromise}
 	 */
-	iPromise.all = function(){
+	iPromise.all = function(arg){
 		return some.apply(null, [1].concat(makeArray(arguments)))
 	}
 	/**
 	 * 当有一个条件成立则执行后续的fulfilled事件处理函数
 	 * @method iPromise.any
-	 * @public
-	 * @param {*} ...args 条件集合，入参形式有三种：1.(a,b,c);2.([a,b,c]);3.({a:a,b:b,c:c})
+	 * @static
+	 * @param {...*} arg - 条件集合，入参形式有三种：1.(a,b,c);2.([a,b,c]);3.({a:a,b:b,c:c})
 	 * @return {iPromise}
 	 */
-	iPromise.any = function(){
+	iPromise.any = function(arg){
 		return some.apply(null, [0].concat(makeArray(arguments)))
 	}
 	/**
+	 * 等待ms毫秒执行fulfilled事件处理函数
 	 * @method iPromise.wait
-	 * @public
-	 * @param {Number} ms 等待的毫秒数
-	 * @param {Array.<*>} [...args] 作为resovle函数的入参
-	 * @type {iPromise}
+	 * @static
+	 * @param {number} [ms=0] - 等待的毫秒数
+	 * @param {...*} [arg] - 作为resovle函数的入参
+	 * @return {iPromise}
 	 */
 	iPromise.wait = defnWait()
 
@@ -162,10 +163,11 @@
 	 * iPromise.all和iPromise.any的实现
 	 * @private
 	 * @method
-	 * @param  {Boolean} isAll true，实现all功能；false，实现any功能
+	 * @param  {boolean} isAll - true，实现all功能；false，实现any功能
+	 * @param {...*} arg - 决定是否执行后续fulfilled事件处理函数的条件
 	 * @return {iPromise}        
 	 */
-	function some(isAll /*, ...args*/){
+	function some(isAll, arg){
 		var args, i = 0, results = [], type = Object.prototype.toString.call(arguments[1])
 		if (/Array|Object/.test(type) && !isFn(arguments[1].then)){
 			args = arguments[1]
@@ -215,16 +217,19 @@
 	 * 创建wait函数
 	 * @method defnWait
 	 * @private
-	 * @param {iPromise} iPromise实例
-	 * @param {Function}
+	 * @param {iPromise} deferred - iPromise实例
+	 * @param {Function.<number, {...*}>}
 	 */
 	function defnWait(deferred){
 		/**
-		 * @param  {Number} ms 等待的毫秒数
-		 * @param  {Array.<*>} [...args] 当deferred不存在时，作为resovle函数的入参使用
+		 * 等待ms毫秒执行后续的fulfilled事件处理函数
+		 * @method  wait
+		 * @public
+		 * @param  {number} [ms=0] - 等待的毫秒数
+		 * @param  {...*} arg - 当deferred不存在时，作为resovle函数的入参使用
 		 * @return {iPromise} 
 		 */
-		return function(ms /*, ...args*/){
+		return function(ms, arg){
 			ms = ms || 0	
 			if (!deferred){
 				var args = makeArray(arguments, 1)
@@ -244,9 +249,11 @@
 	}
 	/**
 	 * 生成供wait函数使用的thenable实例
-	 * @param {Number} methodIdx 方法索引，0:resolve,1:reject
-	 * @param {Number} ms 等待的毫秒数
-	 * @param {*} arg
+	 * @method createThenable4Wait
+	 * @private
+	 * @param {number} methodIdx - 方法索引，0:resolve,1:reject
+	 * @param {number} ms - 等待的毫秒数
+	 * @param {*} arg - resolve、reject函数的入参
 	 */
 	function createThenable4Wait(methodIdx, ms, arg){
 		return {
@@ -263,10 +270,10 @@
 	 * 订阅fulfilled和rejected事件，和附加finally语句块内执行函数
 	 * @method subs
 	 * @private
-	 * @param  {Object} state iPromise实例的内部状态对象
-	 * @param  {Function} fulfilledFn fulfilled事件处理函数
-	 * @param  {Function} rejectedFn rejected事件处理函数
-	 * @param  {Function} finallyFn finally语句块内执行函数
+	 * @param  {Object} state - iPromise实例的内部状态对象
+	 * @param  {Function.<*>} [fulfilledFn] - fulfilled事件处理函数
+	 * @param  {Function.<*>} [rejectedFn] - rejected事件处理函数
+	 * @param  {Function.<>} [finallyFn] - finally语句块内执行函数
 	 * @return {iPromise}       
 	 */
 	var subs = function(state, fulfilledFn, rejectedFn, finallyFn){
@@ -315,8 +322,8 @@
 	 * 执行fulfilled和rejected事件处理函数
 	 * @method fire
 	 * @private
-	 * @param  {Object} state iPromise实例的内部状态对象
-	 * @param  {*} arg   fulfilled和rejected事件处理函数的入参
+	 * @param  {Object} state - iPromise实例的内部状态对象
+	 * @param  {*} arg - fulfilled和rejected事件处理函数的入参
 	 */
 	var fire = function(state, arg){
 		var val = state[configMgr.find(state.status)[0]].call(this, arg)
@@ -340,9 +347,10 @@
 	/**
 	 * 实现接口
 	 * @method impls
-	 * @param  {Object} members   接口实现
-	 * @param  {Function} interface 接口函数
-	 * @return {Object}           接口实现对象
+	 * @exports
+	 * @param  {Object.<string, *>} members - 接口实现
+	 * @param  {Function} interface 接- 口函数
+	 * @return {Object} - 接口实现对象
 	 */
 	var impls = exports['impls'] = function(members, interface){
 		var key = interface.toString()
@@ -366,11 +374,12 @@
 	/**
 	 * 浅拷贝
 	 * @method extend
-	 * @param {Object|Array} target 目标对象
-	 * @param {Object} other 源对象
-	 * @param {String|Boolean} [props=false] true表示重写target属性，false表示不重写；字符串表示将被拷贝的属性
-	 * @param {String} [seperator=' '] 当props为String类型时，表示属性间的分隔符
-	 * @return {Object|Array}
+	 * @exports
+	 * @param {(Object|Array)} target - 目标对象
+	 * @param {Object} other - 源对象
+	 * @param {(string|boolean)} [props=false] - true表示重写target属性，false表示不重写；字符串表示将被拷贝的属性
+	 * @param {string} [seperator=' '] - 当props为String类型时，表示属性间的分隔符
+	 * @return {(Object|Array)}
 	 */
 	var extend = exports['extend'] = function(target, other, props, seperator){
 		var isArray = Object.prototype.toString.call(target).indexOf('Array') > 0
@@ -392,8 +401,9 @@
 	/**
 	 * 将类数组或单个元素转换为数组
 	 * @method makeArray
-	 * @param {*} arrayLike 类数组、没有length的对象或其他Primitive变量
-	 * @param {Number} startIdx 截取元素的起始位
+	 * @exports
+	 * @param {*} arrayLike - 类数组、没有length的对象或其他Primitive变量
+	 * @param {number} [startIdx=0] - 截取元素的起始位
 	 * @return {Array}
 	 */
 	var makeArray = exports['makeArray'] = function(arrayLike, startIdx){
@@ -421,8 +431,9 @@
 	/**
 	 * 检测函数是否为Generator Function
 	 * @method isGenFn 
-	 * @param  {Function} fn 待检测函数
-	 * @return {[Boolean]}   true为Generator Function   
+	 * @exports
+	 * @param  {Function} fn - 待检测函数
+	 * @return {boolean} - true为Generator Function   
 	 */
 	var isGenFn = exports['isGenFn'] = function(fn){
 		return rIsGenFn.test(fn.constructor) || fn.isGenerator && fn.isGenerator()
@@ -431,8 +442,8 @@
 	/**
 	 * setImmediate polyfill
 	 * @method  setImmediate
-	 * @param  {Function} fn [description]
-	 * @return {[type]}      [description]
+	 * @exports
+	 * @param  {Function.<Function>} fn 异步执行的函数
 	 */
 	var setImmediate = exports['setImmediate'] = window.setImmediate || function(fn){
 		var args = [].slice.call(arguments, 1)	
@@ -444,6 +455,7 @@
 	/**
 	 * 配置信息管理器
 	 * @constructor
+	 * @exports
 	 * @param  {Array} configTuple 配置信息元组
 	 * @return {ConfigMgr}
 	 */
@@ -453,7 +465,8 @@
 	}
 	/**
 	 * 根据元素获取所属元组
-	 * @param {String|Number} key 元组元素、状态位索引
+	 * @method find
+	 * @param {(string|number)} key 元组元素、状态位索引
 	 * @param {Array}
 	 */
 	ConfigMgr.prototype.find = function(key){	
@@ -468,8 +481,9 @@
 	}
 	/**
 	 * 循环元组指定索引的元素
-	 * @param {Number} idx 子元组内元素的索引, 取值范围: 0或1
-	 * @param {Function.<{String} el, {Number} i, {Boolean} isEnd>} fn
+	 * method each
+	 * @param {number} idx 子元组内元素的索引, 取值范围: 0或1
+	 * @param {Function.<{string} el, {number} i, {boolean} isEnd>} fn
 	 */
 	ConfigMgr.prototype.each = function(idx, fn){
 		idx = idx % 2
@@ -479,9 +493,10 @@
 	}
 	/**
 	 * 序列化元组指定索引的元素
-	 * @param {Number} idx 索引
-	 * @param {String} seperator 分隔符
-	 * @param {String} 序列化字符串
+	 * @method stringify
+	 * @param {number} idx 索引
+	 * @param {string} seperator 分隔符
+	 * @param {string} 序列化字符串
 	 */
 	ConfigMgr.prototype.stringify = function(idx, seperator){
 		var ret = []

@@ -1,5 +1,5 @@
 ;(function(require, exports, module){
-	var version = '0.1.0'
+		var version = '0.1.0'
 
 	var exports = {'undefined': void 0}
 
@@ -13,9 +13,10 @@
 	/**
 	 * 实现接口
 	 * @method impls
-	 * @param  {Object} members   接口实现
-	 * @param  {Function} interface 接口函数
-	 * @return {Object}           接口实现对象
+	 * @exports
+	 * @param  {Object.<string, *>} members - 接口实现
+	 * @param  {Function} interface 接- 口函数
+	 * @return {Object} - 接口实现对象
 	 */
 	var impls = exports['impls'] = function(members, interface){
 		var key = interface.toString()
@@ -39,11 +40,12 @@
 	/**
 	 * 浅拷贝
 	 * @method extend
-	 * @param {Object|Array} target 目标对象
-	 * @param {Object} other 源对象
-	 * @param {String|Boolean} [props=false] true表示重写target属性，false表示不重写；字符串表示将被拷贝的属性
-	 * @param {String} [seperator=' '] 当props为String类型时，表示属性间的分隔符
-	 * @return {Object|Array}
+	 * @exports
+	 * @param {(Object|Array)} target - 目标对象
+	 * @param {Object} other - 源对象
+	 * @param {(string|boolean)} [props=false] - true表示重写target属性，false表示不重写；字符串表示将被拷贝的属性
+	 * @param {string} [seperator=' '] - 当props为String类型时，表示属性间的分隔符
+	 * @return {(Object|Array)}
 	 */
 	var extend = exports['extend'] = function(target, other, props, seperator){
 		var isArray = Object.prototype.toString.call(target).indexOf('Array') > 0
@@ -65,8 +67,9 @@
 	/**
 	 * 将类数组或单个元素转换为数组
 	 * @method makeArray
-	 * @param {*} arrayLike 类数组、没有length的对象或其他Primitive变量
-	 * @param {Number} startIdx 截取元素的起始位
+	 * @exports
+	 * @param {*} arrayLike - 类数组、没有length的对象或其他Primitive变量
+	 * @param {number} [startIdx=0] - 截取元素的起始位
 	 * @return {Array}
 	 */
 	var makeArray = exports['makeArray'] = function(arrayLike, startIdx){
@@ -94,8 +97,9 @@
 	/**
 	 * 检测函数是否为Generator Function
 	 * @method isGenFn 
-	 * @param  {Function} fn 待检测函数
-	 * @return {[Boolean]}   true为Generator Function   
+	 * @exports
+	 * @param  {Function} fn - 待检测函数
+	 * @return {boolean} - true为Generator Function   
 	 */
 	var isGenFn = exports['isGenFn'] = function(fn){
 		return rIsGenFn.test(fn.constructor) || fn.isGenerator && fn.isGenerator()
@@ -104,8 +108,8 @@
 	/**
 	 * setImmediate polyfill
 	 * @method  setImmediate
-	 * @param  {Function} fn [description]
-	 * @return {[type]}      [description]
+	 * @exports
+	 * @param  {Function.<Function>} fn 异步执行的函数
 	 */
 	var setImmediate = exports['setImmediate'] = window.setImmediate || function(fn){
 		var args = [].slice.call(arguments, 1)	
@@ -117,6 +121,7 @@
 	/**
 	 * 配置信息管理器
 	 * @constructor
+	 * @exports
 	 * @param  {Array} configTuple 配置信息元组
 	 * @return {ConfigMgr}
 	 */
@@ -126,7 +131,8 @@
 	}
 	/**
 	 * 根据元素获取所属元组
-	 * @param {String|Number} key 元组元素、状态位索引
+	 * @method find
+	 * @param {(string|number)} key 元组元素、状态位索引
 	 * @param {Array}
 	 */
 	ConfigMgr.prototype.find = function(key){	
@@ -141,8 +147,9 @@
 	}
 	/**
 	 * 循环元组指定索引的元素
-	 * @param {Number} idx 子元组内元素的索引, 取值范围: 0或1
-	 * @param {Function.<{String} el, {Number} i, {Boolean} isEnd>} fn
+	 * method each
+	 * @param {number} idx 子元组内元素的索引, 取值范围: 0或1
+	 * @param {Function.<{string} el, {number} i, {boolean} isEnd>} fn
 	 */
 	ConfigMgr.prototype.each = function(idx, fn){
 		idx = idx % 2
@@ -152,9 +159,10 @@
 	}
 	/**
 	 * 序列化元组指定索引的元素
-	 * @param {Number} idx 索引
-	 * @param {String} seperator 分隔符
-	 * @param {String} 序列化字符串
+	 * @method stringify
+	 * @param {number} idx 索引
+	 * @param {string} seperator 分隔符
+	 * @param {string} 序列化字符串
 	 */
 	ConfigMgr.prototype.stringify = function(idx, seperator){
 		var ret = []
