@@ -32,7 +32,7 @@ Compiled and production-ready code can be found in the `dist` directory.Then `sr
 </script>
 ````
 ## API
-###1. `iPromise`
+####1. `iPromise`
 
 
 ##Changelog
