@@ -32,7 +32,14 @@ Compiled and production-ready code can be found in the `dist` directory.Then `sr
 </script>
 ````
 ## API
-#####1. `iPromise({Function|Generator Function} mixin?)`
+#####1. `{iPromise} iPromise({Function|Generator Function} mixin?)`
+#####2. `{iPromise} iPromise.all({Object|Array} args | {*} ...args)`
+#####3. `{iPromise} iPromise.any({Object|Array} args | {*} ...args)`
+#####4. `{iPromise} iPromise.wait({Number} ms, {*} ...args?)`
+#####5. `{iPromise} iPromise().then({Function} fulfilledFn?, {Function} rejectedFn?, {Function} finallyFn?)`
+#####6. `{iPromise} iPromise().catch({Function} rejectedFn?, {Function} finallyFn?)`
+#####7. `iPromise().resolve({*} ...args?)`
+#####8. `iPromise().reject({*} ...args?)`
 
 
 ##Changelog
