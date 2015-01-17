@@ -1,11 +1,11 @@
 iPromise v0.7.0
 ========
 
-An implementation for promises/A+<br/>
+iPromise is a standalone async library which implements the Promises/A+. Async codes are confusing because you will dump into the callback hell easily. iPromise improve the readability of async codes, and let us don't worry about the pain any more.<br/>
 
 ###In This Documentation
-1. [Getting Started](#getting-started)
-2. [API](#api)<br/>
+[1. Getting Started](#getting-started)
+[2. API](#api)<br/>
 &nbsp;[Constructor](#constructor)<br/>
 &emsp;[iPromise(mixin, arg)](#ipromisemixin-arg)<br/>
 &nbsp;[Instance Methods](#instance-methods)<br/>
@@ -18,6 +18,8 @@ An implementation for promises/A+<br/>
 &emsp;[iPromise.all(condition)](#ipromiseallcondition)<br/>
 &emsp;[iPromise.any(condition)](#ipromiseanycondition)<br/>
 &emsp;[iPromise.wait(ms, arg)](#ipromisewaitms-arg)<br/>
+[3. Changelog](#changelog)
+[4. Referrence](#referrence)
 
 ## Getting Started
 ###1.Include iPromise on your site.
