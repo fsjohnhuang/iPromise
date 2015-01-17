@@ -4,20 +4,20 @@ iPromise v0.7.0
 An implementation for promises/A+<br/>
 
 ###In This Documentation
-1. Getting Started
-2. API<br/>
+1. [Getting Started](#getting-started)
+2. [API](#api)<br/>
 &nbsp;[Constructor](#constructor)<br/>
 &emsp;[iPromise(mixin, arg)](#ipromisemixin-arg)<br/>
-&nbsp;Instance Methods<br/>
-&emsp;iPromise#then(fulfilledFn, rejectedFn, finallyFn)<br/>
-&emsp;iPromise#catch(rejectedFn, finallyFn)<br/>
-&emsp;iPromise#resolve(arg)<br/>
-&emsp;iPromise#reject(arg)<br/>
-&emsp;iPromise#wait(ms)<br/>
-&nbsp;Function Properties<br/>
-&emsp;iPromise.all(condition)<br/>
-&emsp;iPromise.any(condition)<br/>
-&emsp;iPromise.wait(ms, arg)<br/>
+&nbsp;[Instance Methods](#instance-methods)<br/>
+&emsp;[iPromise#then(fulfilledFn, rejectedFn, finallyFn)](#ipromisethenfulfilledfn-rejectedfn-finallyfn)<br/>
+&emsp;[iPromise#catch(rejectedFn, finallyFn)](#ipromisecatchrejectedfn-finallyfn)<br/>
+&emsp;[iPromise#resolve(arg)](#ipromiseresolvearg)<br/>
+&emsp;[iPromise#reject(arg)](#ipromiserejectarg)<br/>
+&emsp;[iPromise#wait(ms)](#ipromisewaitms)<br/>
+&nbsp;[Function Properties](#function-properties)<br/>
+&emsp;[iPromise.all(condition)](#ipromiseallcondition)<br/>
+&emsp;[iPromise.any(condition)](#ipromiseanycondition)<br/>
+&emsp;[iPromise.wait(ms, arg)](#ipromisewaitms-arg)<br/>
 
 ## Getting Started
 ###1.Include iPromise on your site.
