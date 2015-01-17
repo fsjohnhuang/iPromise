@@ -67,6 +67,11 @@ iPromise
   })
   .wait(500)
   .(function(){
+    xy.x = xy.x + 100 
+    el.style.left =  xy.x + 'px'
+  })
+  .wait(500)
+  .(function(){
     xy.x = xy.x + 200 
     el.style.left =  xy.x + 'px'
   })
