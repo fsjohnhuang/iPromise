@@ -65,8 +65,16 @@ iPromise(function *(name, city){
 ````
 ###Instance Methods
 ####`iPromise#then(fulfilledFn, rejectedFn, finallyFn)`
+**@description** Subscribes the iPromise object's status changed event.<br/>
+**@param** {Function.<\*>} fulfilledFn - It would be called when iPromise object's status is from pending to fulfilled<br/>
+**@param** {Function.<\*>} rejectedFn - It would be called when iPromise object's status is from pending to rejected<br/>
+**@param** {Function.<\*>} finallyFn - It would be called when iPromise object's status is changed and has subscribed fulfilled or rejected status changing event<br/>
+**@return** {iPromise} - The subset of iPromise object which contains `iPromise#then`, `iPromise#catch` and `iPromise#wait` only.<br/>
 ####`iPromise#catch(rejectedFn, finallyFn)`
-####`iPromise#wait(ms)`
+**@description** Subscribes the iPromise object's status changed event which is from pending to rejected.<br/>
+**@param** {Function.<\*>} rejectedFn - It would be called when iPromise object's status is from pending to rejected<br/>
+**@param** {Function.<\*>} finallyFn - It would be called when iPromise object's status is changed and has subscribed rejected status changing event<br/>
+**@return** {iPromise} - The subset of iPromise object which contains `iPromise#then`, `iPromise#catch` and `iPromise#wait` only.<br/>
 ####`iPromise#resolve(arg)`
 **@description** Change the status of iPromise object from pending to fulfilled.<br/>
 **@param** {...\*} arg - It would be as the arguments of fulfilled callback function which is invoked first.<br/>
@@ -100,6 +108,20 @@ iPromise()
     console.log(arg[0] + arg[1])
   })
   .reject(1, 2)
+````
+####`iPromise#wait(ms)`
+**@description** Invokes the next callback function after ms milliseconds without changing the status of iPromise object.<br/>
+**@param** {number} ms - The time to wait.<br/>
+**@return** {iPromise} - The subset of iPromise object which contains `iPromise#then`, `iPromise#catch` and `iPromise#wait` only.<br/>
+````
+iPromise()
+  .then(function(arg){
+    return +new Date()
+  })
+  .wait(1000)
+  .then(function(arg){
+    console.log((+new Date()) - arg > 1000) // true
+  }).resolve()
 ````
 ###Function Properties
 ####`iPromise.all(condition)`
