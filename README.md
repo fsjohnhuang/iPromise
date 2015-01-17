@@ -63,18 +63,52 @@ iPromise(function *(name, city){
   console.log(msg)
 }, 'fsjohnhuang', 'fs')
 ````
-
 ###Instance Methods
+####`iPromise#then(fulfilledFn, rejectedFn, finallyFn)`
+####`iPromise#catch(rejectedFn, finallyFn)`
+####`iPromise#wait(ms)`
+####`iPromise#resolve(arg)`
+**@description** Change the status of iPromise object from pending to fulfilled
+**@param** {...*} arg - It would be as the arguments of fulfilled callback function which is invoked first.
+````
+/* arg is such as ({*} arg) */
+iPromise()
+  .then(function(arg){
+    console.log(arg)
+  })
+  .resolve(1)
+/* arg is such as (arg1, arg2[, argn]*) */
+iPromise()
+  .then(function(arg){
+    console.log(arg[0] + arg[1])
+  })
+  .resolve(1, 2)
+````
+####`iPromise#reject(arg)`
+**@description** Change the status of iPromise object from pending to rejected
+**@param** {...*} arg - It would be as the arguments of rejected callback function which is invoked first.
+````
+/* arg is such as ({*} arg) */
+iPromise()
+  .then(null, function(arg){
+    console.log(arg)
+  })
+  .reject(1)
+/* arg is such as (arg1, arg2[, argn]*) */
+iPromise()
+  .catch(function(arg){
+    console.log(arg[0] + arg[1])
+  })
+  .reject(1, 2)
+````
 ###Function Properties
-#####1. `{iPromise} iPromise({Function|Generator Function} mixin?)`
-#####2. `{iPromise} iPromise.all({Object|Array} args | {*} ...args)`
-#####3. `{iPromise} iPromise.any({Object|Array} args | {*} ...args)`
-#####4. `{iPromise} iPromise.wait({Number} ms, {*} ...args?)`
-#####5. `{iPromise} iPromise().then({Function} fulfilledFn?, {Function} rejectedFn?, {Function} finallyFn?)`
-#####6. `{iPromise} iPromise().catch({Function} rejectedFn?, {Function} finallyFn?)`
-#####7. `iPromise().resolve({*} ...args?)`
-#####8. `iPromise().reject({*} ...args?)`
+####`iPromise.all(condition)`
+####`iPromise.any(condition)`
+####`iPromise.wait(ms, arg)`
 
+**@description** 
+**@param** 
+**@return** 
 
 ##Changelog
 ###v0.7.0
