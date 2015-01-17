@@ -68,8 +68,8 @@ iPromise(function *(name, city){
 ####`iPromise#catch(rejectedFn, finallyFn)`
 ####`iPromise#wait(ms)`
 ####`iPromise#resolve(arg)`
-**@description** Change the status of iPromise object from pending to fulfilled
-**@param** {...*} arg - It would be as the arguments of fulfilled callback function which is invoked first.
+**@description** Change the status of iPromise object from pending to fulfilled.<br/>
+**@param** {...\*} arg - It would be as the arguments of fulfilled callback function which is invoked first.<br/>
 ````
 /* arg is such as ({*} arg) */
 iPromise()
@@ -85,8 +85,8 @@ iPromise()
   .resolve(1, 2)
 ````
 ####`iPromise#reject(arg)`
-**@description** Change the status of iPromise object from pending to rejected
-**@param** {...*} arg - It would be as the arguments of rejected callback function which is invoked first.
+**@description** Change the status of iPromise object from pending to rejected.<br/>
+**@param** {...\*} arg - It would be as the arguments of rejected callback function which is invoked first.<br/>
 ````
 /* arg is such as ({*} arg) */
 iPromise()
