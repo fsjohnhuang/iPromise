@@ -33,7 +33,7 @@ Compiled and production-ready code can be found in the `dist` directory.Then `sr
 ````
 ## API
 ###Constructor
-#####`iPromise(mixin, arg)`
+####`iPromise(mixin, arg)`
 **@description** Create new iPromise object.<br/>
 **@param** {(Function.<Function fulfilledFn,Function rejectedFn>|GeneratorFunction)} [mixin] - Factory function to change the status of iPromise object. Or a Generator Function(feature by ES6).<br/>
 **@param** {...*} arg - It would be work when `mixin` is an instanceof GeneratorFunction.<br/>
