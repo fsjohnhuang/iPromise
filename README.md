@@ -32,6 +32,40 @@ Compiled and production-ready code can be found in the `dist` directory.Then `sr
 </script>
 ````
 ## API
+###Constructor
+#####`iPromise(mixin, arg)`
+**@description** Create new iPromise object
+**@param** {(Function.<Function fulfilledFn,Function rejectedFn>|GeneratorFunction)} [mixin] - Factory function to change the status of iPromise object. Or a Generator Function(feature by ES6).
+**@param** {...*} arg - It would be work when `mixin` is an instanceof GeneratorFunction
+**@return** {?iPromise} - The returns would be undefined when `mixin` is an instanceof GeneratorFunction
+````
+/* without mixin */
+var p1 = iPromise()
+
+/* mixin is function */
+var p2 = iPromise(function(resolve, reject){
+  setTimeout(function(){
+    resolve('hello', 'world', '!')
+  }, 5000)
+})
+
+/* mixin is generator function */
+iPromise(function *(name, city){
+  console.log('Welcome to ' + city)
+
+  var msg
+  try{
+    msg = yield wrapMsg(name)
+  }
+  catch(e){
+    msg = 'Hi, ' + name
+  }
+  console.log(msg)
+}, 'fsjohnhuang', 'fs')
+````
+
+###Instance Methods
+###Function Properties
 #####1. `{iPromise} iPromise({Function|Generator Function} mixin?)`
 #####2. `{iPromise} iPromise.all({Object|Array} args | {*} ...args)`
 #####3. `{iPromise} iPromise.any({Object|Array} args | {*} ...args)`
