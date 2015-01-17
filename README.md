@@ -70,11 +70,29 @@ iPromise(function *(name, city){
 **@param** {Function.<\*>} rejectedFn - It would be called when iPromise object's status is from pending to rejected<br/>
 **@param** {Function.<\*>} finallyFn - It would be called when iPromise object's status is changed and has subscribed fulfilled or rejected status changing event<br/>
 **@return** {iPromise} - The subset of iPromise object which contains `iPromise#then`, `iPromise#catch` and `iPromise#wait` only.<br/>
+````
+iPromise()
+  .then(function(){
+    console.log('from pending to fulfilled')
+  }, function(){
+    console.log('from pending to rejected')
+  }, function(){
+    console.log('finally')
+  }).resolve()
+````
 ####`iPromise#catch(rejectedFn, finallyFn)`
 **@description** Subscribes the iPromise object's status changed event which is from pending to rejected.<br/>
 **@param** {Function.<\*>} rejectedFn - It would be called when iPromise object's status is from pending to rejected<br/>
 **@param** {Function.<\*>} finallyFn - It would be called when iPromise object's status is changed and has subscribed rejected status changing event<br/>
 **@return** {iPromise} - The subset of iPromise object which contains `iPromise#then`, `iPromise#catch` and `iPromise#wait` only.<br/>
+````
+iPromise()
+  .catch(function(){
+    console.log('from pending to rejected')
+  }, function(){
+    console.log('finally')
+  }).reject()
+````
 ####`iPromise#resolve(arg)`
 **@description** Change the status of iPromise object from pending to fulfilled.<br/>
 **@param** {...\*} arg - It would be as the arguments of fulfilled callback function which is invoked first.<br/>
@@ -125,12 +143,56 @@ iPromise()
 ````
 ###Function Properties
 ####`iPromise.all(condition)`
+**@description** Change the status of iPromise object from pending to fulfilled when meets all conditions, otherwise would change status from pending to rejected<br/>
+**@param** {...\*} condition<br/>
+**@return** {iPromise} - The subset of iPromise object which contains `iPromise#then`, `iPromise#catch` and `iPromise#wait` only.<br/>
+````
+a = 1
+b = iPromise(function(r){
+  setTimeout(function(){r(2)}, 200)
+})
+c = {
+  then: function(r){
+    setTimeout(function(){r(3)}, 600)
+  }
+}
+var curr, o = +new Date() 
+iPromise.all(a,b,c).then(function(val){
+  curr = +new Date()
+  console.log(curr - o > 600) // true
+}
+````
 ####`iPromise.any(condition)`
+**@description** Change the status of iPromise object from pending to fulfilled when meets any condition, otherwise would change status from pending to rejected<br/>
+**@param** {...\*} condition<br/>
+**@return** {iPromise} - The subset of iPromise object which contains `iPromise#then`, `iPromise#catch` and `iPromise#wait` only.<br/>
+````
+a = iPromise(function(r){
+  setTimeout(function(){r(2)}, 200)
+})
+c = {
+  then: function(r){
+    setTimeout(function(){r(3)}, 600)
+  }
+}
+var curr, o = +new Date() 
+iPromise.all(b,c).then(function(val){
+  curr = +new Date()
+  console.log(curr - o < 300) // true
+}
+````
 ####`iPromise.wait(ms, arg)`
-
-**@description** 
-**@param** 
-**@return** 
+**@description** Changes the status of iPromise object from pending to fulfilled after ms milliseconds.<br/>
+**@param** {number} ms - The time to wait.<br/>
+**@param** {...\*} arg - Is would be arguments of the next fulfilled callback function.<br/>
+**@return** {iPromise} - The subset of iPromise object which contains `iPromise#then`, `iPromise#catch` and `iPromise#wait` only.<br/>
+````
+iPromise
+  .wait(1000, +new Date())
+  .then(function(arg){
+    console.log((+new Date()) - arg > 1000) // true
+  })
+````
 
 ##Changelog
 ###v0.7.0
