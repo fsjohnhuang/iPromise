@@ -6,18 +6,18 @@ An implementation for promises/A+<br/>
 ###In This Documentation
 1. Getting Started
 2. API<br/>
-&emsp;Constructor<br/>
-&emsp;&emsp;iPromise(mixin, arg)<br/>
-&emsp;Instance Methods<br/>
-&emsp;&emsp;iPromise#then(fulfilledFn, rejectedFn, finallyFn)<br/>
-&emsp;&emsp;iPromise#catch(rejectedFn, finallyFn)<br/>
-&emsp;&emsp;iPromise#resolve(arg)<br/>
-&emsp;&emsp;iPromise#reject(arg)<br/>
-&emsp;&emsp;iPromise#wait(ms)<br/>
-&emsp;Function Properties<br/>
-&emsp;&emsp;iPromise.all(condition)<br/>
-&emsp;&emsp;iPromise.any(condition)<br/>
-&emsp;&emsp;iPromise.wait(ms, arg)<br/>
+&nbsp;[Constructor](#constructor)<br/>
+&emsp;[iPromise(mixin, arg)](#ipromisemixin-arg)<br/>
+&nbsp;Instance Methods<br/>
+&emsp;iPromise#then(fulfilledFn, rejectedFn, finallyFn)<br/>
+&emsp;iPromise#catch(rejectedFn, finallyFn)<br/>
+&emsp;iPromise#resolve(arg)<br/>
+&emsp;iPromise#reject(arg)<br/>
+&emsp;iPromise#wait(ms)<br/>
+&nbsp;Function Properties<br/>
+&emsp;iPromise.all(condition)<br/>
+&emsp;iPromise.any(condition)<br/>
+&emsp;iPromise.wait(ms, arg)<br/>
 
 ## Getting Started
 ###1.Include iPromise on your site.
