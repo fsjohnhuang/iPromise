@@ -61,17 +61,17 @@ var el = document.getElementById('box')
 var xy = {x: el.offsetLeft, y: el.offsetTop}
 iPromise
   .wait(500)
-  .(function(){
+  .then(function(){
     xy.x = xy.x + 100 
     el.style.left =  xy.x + 'px'
   })
   .wait(500)
-  .(function(){
+  .then(function(){
     xy.x = xy.x + 100 
     el.style.left =  xy.x + 'px'
   })
   .wait(500)
-  .(function(){
+  .then(function(){
     xy.x = xy.x + 200 
     el.style.left =  xy.x + 'px'
   })
