@@ -5,8 +5,19 @@ An implementation for promises/A+<br/>
 
 ###In This Documentation
 1. Getting Started
-2. Usage
-3. API
+2. API
+&emsp;Constructor<br/>
+&emsp;&emsp;iPromise(mixin, arg)<br/>
+&emsp;Instance Methods<br/>
+&emsp;&emsp;iPromise#then(fulfilledFn, rejectedFn, finallyFn)<br/>
+&emsp;&emsp;iPromise#catch(rejectedFn, finallyFn)<br/>
+&emsp;&emsp;iPromise#resolve(arg)<br/>
+&emsp;&emsp;iPromise#reject(arg)<br/>
+&emsp;&emsp;iPromise#wait(ms)<br/>
+&emsp;Function Properties<br/>
+&emsp;&emsp;iPromise.all(condition)<br/>
+&emsp;&emsp;iPromise.any(condition)<br/>
+&emsp;&emsp;iPromise.wait(ms, arg)<br/>
 
 ## Getting Started
 ###1.Include iPromise on your site.
@@ -14,23 +25,7 @@ Compiled and production-ready code can be found in the `dist` directory.Then `sr
 ````
 <script src="dist/js/iPromise.js"></script>
 ````
-## Usage
-###1.Sample1
-````
-<script>
-  iPromise(function(resolve, reject){
-    setTimeout(1000, resolve, 'hello world')
-  }).then(function(val){
-    console.log(val) // 'hello world'
-  })
-</script>
-````
-###2.Sample2
-````
-<script>
-  iPromise.
-</script>
-````
+
 ## API
 ###Constructor
 ####`iPromise(mixin, arg)`
