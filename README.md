@@ -1,5 +1,5 @@
 iPromise v0.7.0
-========
+=======
 
 **iPromise** is a standalone async library which implements the [Promises/A+](https://promisesaplus.com/). Async codes are confusing because you will dump into the callback hell easily. **iPromise** improves the readability of async codes by saving us from the hell.<br/>
 
@@ -302,9 +302,13 @@ iPromise(function *(dataSrc, tplSrc){
 1. 新增`{Promise} wait({number} ms)`和`{Promise} iPromise.wait({number} ms)`，等待ms毫秒在执行后续的回调函数，此方法不会改变Deferred实例状态和责任链传递的值。<br/>
 
 ###v0.4.0
+**新特性**<br/>
+1. 新增`{Promise} wait({number} ms)`和`{Promise} iPromise.wait({number} ms)`，等待ms毫秒在执行后续的回调函数，此方法不会改变Deferred实例状态和责任链传递的值。<br/>
+
+##v0.4.0
+>>>>>>> 4a9102f96211468a3361b8239a0627a80c475a54
 **bug修复**<br/>
 1. \#20141215 可重复添加回调函数->仅能添加一次回调函数<br/>
-
 **新特性**<br/>
 1. 新增API`iPromise.all([Object|Array}|...[*])`, 当所有入参均成功返回值时则执行成功回调函数<br/>
 ````
@@ -355,8 +359,6 @@ iPromise.all([thenable, name, promise1]).then(function(arg){
 iPromise.all({a:thenable, b:name, c:promise1}).then(function(arg){
 	alert(arg) // 显示fsjohnhuang
 })
-````
-
 
 ###v0.3.0
 **新特性**<Br/>
@@ -397,7 +399,6 @@ setTimeout(function(){
 	})	
 }, 1000)
 ````
-
 
 ###v0.2.0
 **全局重构，API说明**<br/>
