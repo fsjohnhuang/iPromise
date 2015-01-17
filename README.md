@@ -21,11 +21,55 @@ iPromise v0.7.0
 [3. Changelog](#changelog)<br/>
 [4. Referrence](#referrence)<br/>
 
-## Getting Started
-###1.Include iPromise on your site.
-Compiled and production-ready code can be found in the `dist` directory.Then `src` directory contains development code. Unit tests are located in the `test` directory.
+## Tutorial
+###1. Build your own production-ready code.
 ````
-<script src="dist/js/iPromise.js"></script>
+> git clone https://github.com/fsjohnhuang/iPromise.git
+> cd iPromise
+> npm install
+> npm run build
+````
+###2. Include iPromise on your site.
+Compiled and production-ready code can be found in the `dist` directory.Then `src` directory contains development code. Unit tests are located in the `test` directory.<br/>
+````
+<script src="dist/iPromise.min.js"></script>
+<script src="myapp.js"></script>
+````
+###3. Comparision with ordinary callback processes
+Now we want to do some amazing animation effection by ordinary callback process.<br/>
+````
+var el = document.getElementById('box')
+var xy = {x: el.offsetLeft, y: el.offsetTop}
+setTimeout(function(){
+  xy.x = xy.x + 100 
+  el.style.left =  xy.x + 'px'
+
+  setTimeout(function(){
+    xy.x = xy.x + 100 
+    el.style.left =  xy.x + 'px'
+
+    setTimeout(function(){
+      xy.x = xy.x + 200 
+      el.style.left =  xy.x + 'px'
+    }, 500)
+  }, 500)
+}, 500)
+````
+iPromise save our time.<br/>
+````
+var el = document.getElementById('box')
+var xy = {x: el.offsetLeft, y: el.offsetTop}
+iPromise
+  .wait(500)
+  .(function(){
+    xy.x = xy.x + 100 
+    el.style.left =  xy.x + 'px'
+  })
+  .wait(500)
+  .(function(){
+    xy.x = xy.x + 200 
+    el.style.left =  xy.x + 'px'
+  })
 ````
 
 ## API

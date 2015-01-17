@@ -28,8 +28,6 @@
 		, noop = utils.noop
 		, isFn = utils.isFn
 
-	undefined = utils.undefined
-
 	/**
 	 * iPromise的状态
 	 * @enum {string}
@@ -335,7 +333,7 @@
 }(function(){
 	var version = '0.1.0'
 
-	var exports = {'undefined': void 0}
+	var exports = {}
 
 	var noop = exports['noop'] = function(){}
 
