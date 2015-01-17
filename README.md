@@ -5,7 +5,7 @@ An implementation for promises/A+<br/>
 
 ###In This Documentation
 1. Getting Started
-2. API
+2. API<br/>
 &emsp;Constructor<br/>
 &emsp;&emsp;iPromise(mixin, arg)<br/>
 &emsp;Instance Methods<br/>
