@@ -34,10 +34,10 @@ Compiled and production-ready code can be found in the `dist` directory.Then `sr
 ## API
 ###Constructor
 #####`iPromise(mixin, arg)`
-**@description** Create new iPromise object
-**@param** {(Function.<Function fulfilledFn,Function rejectedFn>|GeneratorFunction)} [mixin] - Factory function to change the status of iPromise object. Or a Generator Function(feature by ES6).
-**@param** {...*} arg - It would be work when `mixin` is an instanceof GeneratorFunction
-**@return** {?iPromise} - The returns would be undefined when `mixin` is an instanceof GeneratorFunction
+**@description** Create new iPromise object.<br/>
+**@param** {(Function.<Function fulfilledFn,Function rejectedFn>|GeneratorFunction)} [mixin] - Factory function to change the status of iPromise object. Or a Generator Function(feature by ES6).<br/>
+**@param** {...*} arg - It would be work when `mixin` is an instanceof GeneratorFunction.<br/>
+**@return** {?iPromise} - The returns would be undefined when `mixin` is an instanceof GeneratorFunction.<br/>
 ````
 /* without mixin */
 var p1 = iPromise()
