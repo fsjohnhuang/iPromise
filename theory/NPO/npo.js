@@ -12,8 +12,11 @@
 	/*jshint validthis:true */
 	"use strict";
 
-	var builtInProp, cycle, scheduling_queue,
-		ToString = Object.prototype.toString,
+	var builtInProp,          // 对象属性定义函数
+		cycle, 		  // 标识是否已发起异步执行请求 
+		scheduling_queue, // 异步执行请求队列
+		ToString = Object.prototype.toString, // 类型判断
+		// 延迟执行函数
 		timer = (typeof setImmediate != "undefined") ?
 			function timer(fn) { return setImmediate(fn); } :
 			setTimeout
@@ -38,8 +41,11 @@
 	}
 
 	// Note: using a queue instead of array for efficiency
+	// 异步请求队列
 	scheduling_queue = (function Queue() {
-		var first, last, item;
+		var first // 指向队首元素
+		  , last  // 指向队尾元素
+		  , item;
 
 		function Item(fn,self) {
 			this.fn = fn;
@@ -48,6 +54,7 @@
 		}
 
 		return {
+			// 元素入队
 			add: function add(fn,self) {
 				item = new Item(fn,self);
 				if (last) {
@@ -59,10 +66,12 @@
 				last = item;
 				item = void 0;
 			},
+			// 清空队列 
 			drain: function drain() {
 				var f = first;
 				first = last = cycle = void 0;
 
+				// 从队首元素开始遍历所有队列元素
 				while (f) {
 					f.fn.call(f.self);
 					f = f.next;
@@ -71,14 +80,17 @@
 		};
 	})();
 
+	// 安排执行状态变化事件的处理函数
 	function schedule(fn,self) {
 		scheduling_queue.add(fn,self);
+		// 防止重复发起异步执行请求
 		if (!cycle) {
 			cycle = timer(scheduling_queue.drain);
 		}
 	}
 
 	// promise duck typing
+	// 检查是否为thenable对象
 	function isThenable(o) {
 		var _then, o_type = typeof o;
 
@@ -204,17 +216,19 @@
 		}
 	}
 
+	// 下一个Promise节点的内部状态数据结构体
 	function MakeDefWrapper(self) {
-		this.def = self;
-		this.triggered = false;
+		this.def = self; // Promise链中前一个Promise节点的内部状态对象
+		this.triggered = false; // 标识当前的Promise是否被触发
 	}
 
+	// Promise内部状态数据结构体
 	function MakeDef(self) {
 		this.promise = self;
-		this.state = 0;
-		this.triggered = false;
-		this.chain = [];
-		this.msg = void 0;
+		this.state = 0; // Promise状态, 0:pending, 1:fulfilled, 2:rejected
+		this.triggered = false; // 标识当前的Promise是否被触发
+		this.chain = []; //
+		this.msg = void 0; // 
 	}
 
 	function Promise(executor) {
@@ -230,6 +244,7 @@
 		// to signal an already "initialized" promise
 		this.__NPO__ = 1;
 
+		// 内部结构体
 		var def = new MakeDef(this);
 
 		this["then"] = function then(success,failure) {
@@ -248,6 +263,7 @@
 				o.resolve = resolve;
 				o.reject = reject;
 			});
+			// Promise链, 一个Promise实例下可有多个Promise子实例
 			def.chain.push(o);
 
 			if (def.state !== 0) {
@@ -261,6 +277,7 @@
 		};
 
 		try {
+			// 调用工厂方法
 			executor.call(
 				void 0,
 				function publicResolve(msg){
