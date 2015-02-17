@@ -5,79 +5,68 @@ describe('iPromise', function(){
 	})
 
 	describe('#<instance>.resolve', function() {
+		var promise
+		beforeEach(function(){
+			promise = iPromise()
+		})
 		describe('argument pattern test', function() {
 			var arg, expval
 
 			it('expect resolve(1) to be 1', function(done){
 				arg = expval = 1
 
-				var promise = iPromise(function(r){
-					r(1)
-				})
-
 				promise.then(function(val){
 					expect(val).to.be.equal(1)
 				}).then(done, done)
+				promise.resolve(1)
 			})
 			it('expect resolve([1,2]) to be [1,2]', function(done){
 				arg = expval = [1, 2]
-				var promise = iPromise(function(r){
-					r(arg)
-				})
 
 				promise.then(function(val){
 					expect(val).to.be.eql(expval)
 				}).then(done, done)
+				promise.resolve(arg)
 			})
 			it('expect resolve({a:1,b:2}) to be {a:1,b:2}', function(done){
 				arg = expval = {a:1,b:2}
-				var promise = iPromise(function(r){
-					r(arg)
-				})
 
 				promise.then(function(val){
 					expect(val).to.be.eql(expval)
 				}).then(done, done)
+				promise.resolve(arg)
 			})
-			it('expect resolve(1,2,3) to be 1', function(done){
+			it('expect resolve(1,2,3) to be [1,2,3]', function(done){
 				arg = expval = [1,2,3]
-				var promise = iPromise(function(r){
-					r.apply(null, arg)
-				})
 
 				promise.then(function(val){
-					expect(val).to.be.eql(1)
+					expect(val).to.be.eql(expval)
 				}).then(done, done)
+				promise.resolve.apply(null, arg)
 			})
 			it('expect iPromise() to be instanceof iPromise', function(){
-				arg = iPromise(function(){}), expval = iPromise
+				arg = iPromise(), expval = iPromise
 				expect(arg).to.be.an.instanceof(expval)
 			})
 			it('expect iPromise().then() to be instanceof iPromise', function(){
-				arg = iPromise(function(){}).then(function(){}, function(){}), expval = iPromise
+				arg = iPromise().then(function(){}, function(){}), expval = iPromise
 				expect(arg).to.be.an.instanceof(expval)
 			})
 			it('expect resolve({iPromise} val) to be instanceof iPromise', function(done){
-				arg = iPromise(function(r){
-					r()
-				}), expval = iPromise
-				var promise = iPromise(function(r){
-					r(arg)
-				})
+				arg = iPromise(), expval = iPromise
 				promise.then(function(val){
 					expect(val).to.be.an.instanceof(expval)
 				}).then(done, done)
+				promise.resolve(arg)
 			})
 			it('expect resolve({then: function(){}}) is thenable object', function(done){
 				arg = {then: function(){}}
 
-				var promise = iPromise(function(r){
-					r(arg)
-				})
 				promise.then(function(val){
 					expect(val).to.have.property('then')
 						.that.is.an.instanceof(Function)
 				}).then(done, done)
+				promise.resolve(arg)
 			})
 		})
 		describe('chain of then()', function() {
@@ -86,9 +75,6 @@ describe('iPromise', function(){
 			it('expect resolve(1) to be 3', function(done){
 				arg = 1, expval = 3
 
-				var promise = iPromise(function(r){
-					r(arg)
-				})
 				promise.then(function(val){
 					return val + 1	
 				}).then(function(val){
@@ -96,61 +82,51 @@ describe('iPromise', function(){
 				}).then(function(val){
 					expect(val).to.be.equal(expval)
 				}).then(done, done)
+				promise.resolve(arg)
 			})
 			it('expect resolve(1) to be 2 with invoking then()', function(done){
 				arg = 1, expval = 2
 
-				var promise = iPromise(function(r){
-					r(arg)
-				})
 				promise.then().then(function(val){
 					return val + 1
 				}).then(function(val){
 					expect(val).to.be.equal(expval)
 				}).then(done, done)
+				promise.resolve(arg)
 			})
 			it('expect resolve(1) to be 2 with invoking then(null)', function(done){
 				arg = 1, expval = 2
 
-				var promise = iPromise(function(r){
-					r(arg)
-				})
 				promise.then(null).then(function(val){
 					return val + 1
 				}).then(function(val){
 					expect(val).to.be.equal(expval)
 				}).then(done, done)
+				promise.resolve(arg)
 			})
 			it('expect resolve(1) to be 2 with invoking then(1)', function(done){
 				arg = 1, expval = 2
 
-				var promise = iPromise(function(r){
-					r(arg)
-				})
 				promise.then(1).then(function(val){
 					return val + 1
 				}).then(function(val){
 					expect(val).to.be.equal(expval)
 				}).then(done, done)
+				promise.resolve(arg)
 			})
 			it('expect resolve(1) to be 2 with invoking then({a:1})', function(done){
 				arg = 1, expval = 2
 
-				var promise = iPromise(function(r){
-					r(arg)
-				})
 				promise.then({a:1}).then(function(val){
 					return val + 1
 				}).then(function(val){
 					expect(val).to.be.equal(expval)
 				}).then(done, done)
+				promise.resolve(arg)
 			})
 			it('expect resolve(1) to be 3 by return iPromise instance', function(done){
 				arg = 1, expval = 3
 
-				var promise = iPromise(function(r){
-					r(arg)
-				})
 				promise
 					.then(function(val){
 						var p = iPromise(function(r){
@@ -164,13 +140,11 @@ describe('iPromise', function(){
 					.then(function(val){
 						expect(val).to.be.equal(expval)
 					}).then(done, done)
+				promise.resolve(arg)
 			})
 			it('expect resolve(1) to be 3 by return thenable instance', function(done){
 				arg = 1, expval = 3
 
-				var promise = iPromise(function(r){
-					r(arg)
-				})
 				promise
 					.then(function(val){
 						return {then: function(r){r(val + 1)}}
@@ -181,6 +155,7 @@ describe('iPromise', function(){
 					.then(function(val){
 						expect(val).to.be.equal(expval)
 					}).then(done, done)
+				promise.resolve(arg)
 			})
 		})
 		describe('then() throws error', function(){
@@ -189,9 +164,6 @@ describe('iPromise', function(){
 			it('expect resolve(1) to be 3', function(done){
 				arg = 1, expval = 3
 
-				var promise = iPromise(function(r){
-					r(arg)
-				})
 				promise
 					.then(function(val){
 						throw {msg:'test', val: val + 1}
@@ -216,134 +188,115 @@ describe('iPromise', function(){
 						}
 						done()
 					})
+				promise.resolve(arg)
 			})
 		})
 	})
 	describe('#<instance>.reject', function() {
+		var promise
+		beforeEach(function(){
+			promise = iPromise()
+		})
 		describe('argument pattern test', function() {
 			var arg, expval
 
 			it('expect (1) to be 1 sub by catch', function(done){
 				arg = expval = 1
-				var promise = iPromise(function(r1, r2){
-					r2(1)
-				})
 
 				promise.catch(function(val){
 					expect(val).to.be.equal(1)
 				}).then(done, done)
+				promise.reject(1)
 			})
 			it('expect (1) to be 1 sub by then', function(done){
 				arg = expval = 1
-				var promise = iPromise(function(r1, r2){
-					r2(1)
-				})
 
 				promise.then(0, function(val){
 					expect(val).to.be.equal(1)
 				}).then(done, done)
+				promise.reject(1)
 			})
 			it('expect ([1,2]) to be [1,2] sub by catch', function(done){
 				arg = expval = [1, 2]
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.catch(function(val){
 					expect(val).to.be.eql(expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect ([1,2]) to be [1,2] sub by then', function(done){
 				arg = expval = [1, 2]
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.then(1, function(val){
 					expect(val).to.be.eql(expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect ({a:1,b:2}) to be {a:1,b:2} sub by catch', function(done){
 				arg = expval = {a:1,b:2}
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.catch(function(val){
 					expect(val).to.be.eql(expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect ({a:1,b:2}) to be {a:1,b:2} sub by then', function(done){
 				arg = expval = {a:1,b:2}
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.then(1, function(val){
 					expect(val).to.be.eql(expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
-			it('expect (1,2,3) to be 1 sub by catch', function(done){
+			it('expect (1,2,3) to be [1,2,3] sub by catch', function(done){
 				arg = expval = [1,2,3]
-				var promise = iPromise(function(r1, r2){
-					r2.apply(null, arg)
-				})
 
 				promise.catch(function(val){
-					expect(val).to.be.eql(1)
+					expect(val).to.be.eql(expval)
 				}).then(done, done)
+				promise.reject.apply(null, arg)
 			})
-			it('expect (1,2,3) to be 1 sub by then', function(done){
+			it('expect (1,2,3) to be [1,2,3] sub by then', function(done){
 				arg = expval = [1,2,3]
-				var promise = iPromise(function(r1, r2){
-					r2.apply(null, arg)
-				})
 
 				promise.then(1, function(val){
-					expect(val).to.be.eql(1)
+					expect(val).to.be.eql(expval)
 				}).then(done, done)
+				promise.reject.apply(null, arg)
 			})
 			it('expect ({iPromise} promise) to be instanceof iPromise sub by catch', function(done){
-				arg = iPromise(function(){}), expval = iPromise
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
+				arg = iPromise(), expval = iPromise
 
 				promise.catch(function(val){
 					expect(val).to.be.an.instanceof(expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect ({iPromise} promise) to be instanceof iPromise sub by then', function(done){
-				arg = iPromise(function(){}), expval = iPromise
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
+				arg = iPromise(), expval = iPromise
 
 				promise.then({}, function(val){
 					expect(val).to.be.an.instanceof(expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect ({then: function(){}}) is thenable object sub by catch', function(done){
 				arg = {then: function(){}}
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.catch(function(val){
 					expect(val).to.have.property('then')
 						.that.is.an.instanceof(Function)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect ({then: function(){}}) is thenable object sub by then', function(done){
 				arg = {then: function(){}}
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.then({a:1}, function(val){
 					expect(val).to.have.property('then')
 						.that.is.an.instanceof(Function)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 		})
 		describe('chain of catch()', function() {
@@ -351,9 +304,6 @@ describe('iPromise', function(){
 
 			it('expect (1) to be 3', function(done){
 				arg = 1, expval = 3
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.catch(function(val){
 					throw {val: val + 1}
@@ -362,108 +312,90 @@ describe('iPromise', function(){
 				}).catch(function(val){
 					expect(val).to.have.property('val', expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect (1) to be 2 with invoking catch()', function(done){
 				arg = 1, expval = 2
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.catch().then(1, function(val){
 					throw {val: val + 1}
 				}).then(1, function(val){
 					expect(val).to.have.property('val', expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect (1) to be 2 with invoking then()', function(done){
 				arg = 1, expval = 2
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.then().then(1, function(val){
 					throw {val: val + 1}
 				}).then(1, function(val){
 					expect(val).to.have.property('val', expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect (1) to be 2 with invoking catch(null)', function(done){
 				arg = 1, expval = 2
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.catch(null).then(1, function(val){
 					throw {val: val + 1}
 				}).then(1, function(val){
 					expect(val).to.have.property('val', expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect (1) to be 2 with invoking then(null,null)', function(done){
 				arg = 1, expval = 2
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.then(null,null).then(1, function(val){
 					throw {val: val + 1}
 				}).then(1, function(val){
 					expect(val).to.have.property('val', expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect (1) to be 2 with invoking catch(1)', function(done){
 				arg = 1, expval = 2
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.catch(1).then(1, function(val){
 					throw {val: val + 1}
 				}).then(1, function(val){
 					expect(val).to.have.property('val', expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect (1) to be 2 with invoking then(null, 1)', function(done){
 				arg = 1, expval = 2
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.then(null, 1).then(1, function(val){
 					throw {val: val + 1}
 				}).then(1, function(val){
 					expect(val).to.have.property('val', expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect (1) to be 2 with invoking catch({a:1})', function(done){
 				arg = 1, expval = 2
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.catch({a:1}).then(1, function(val){
 					throw {val: val + 1}
 				}).then(1, function(val){
 					expect(val).to.have.property('val', expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect (1) to be 2 with invoking then(null, {a:1})', function(done){
 				arg = 1, expval = 2
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise.then(null, {a:1}).then(1, function(val){
 					throw {val: val + 1}
 				}).then(1, function(val){
 					expect(val).to.have.property('val', expval)
 				}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect (1) to be 3 by return iPromise instance sub by catch', function(done){
 				arg = 1, expval = 3
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise
 					.catch(function(val){
@@ -478,12 +410,10 @@ describe('iPromise', function(){
 					.then(function(val){
 						expect(val).to.be.equal(expval)
 					}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect (1) to be 3 by return iPromise instance sub by then', function(done){
 				arg = 1, expval = 3
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise
 					.then(1, function(val){
@@ -498,12 +428,10 @@ describe('iPromise', function(){
 					.then(function(val){
 						expect(val).to.be.equal(expval)
 					}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect (1) to be 3 by return thenable instance sub by catch', function(done){
 				arg = 1, expval = 3
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise
 					.catch(function(val){
@@ -515,12 +443,10 @@ describe('iPromise', function(){
 					.then(function(val){
 						expect(val).to.be.equal(expval)
 					}).then(done, done)
+				promise.reject(arg)
 			})
 			it('expect (1) to be 3 by return thenable instance sub by then', function(done){
 				arg = 1, expval = 3
-				var promise = iPromise(function(r1, r2){
-					r2(arg)
-				})
 
 				promise
 					.then(1, function(val){
@@ -532,16 +458,18 @@ describe('iPromise', function(){
 					.then(function(val){
 						expect(val).to.be.equal(expval)
 					}).then(done, done)
+				promise.reject(arg)
 			})
 		})
 	})
 	describe('#finally function as argument', function() {
+		var promise
+		beforeEach(function(){
+			promise = iPromise()
+		})
 		describe('finally function as argument with then', function(){
 			var arg, expVal
 			it('would be called when invokes resolve() with fulfilled function', function(done){
-				var promise = iPromise(function(r1, r2){
-					r1()	
-				})
 				var isCalled = false
 				promise.then(function(){
 					expect(1).to.be.ok()
@@ -550,22 +478,18 @@ describe('iPromise', function(){
 				}).then(function(){
 					expect(isCalled).to.be.true()
 				},done).then(done, done)
+				promise.resolve()
 			})
 			it('won\'t be called when invokes resolve() without fulfilled function', function(done){
-				var promise = iPromise(function(r1, r2){
-					r1()	
-				})
 				var isCalled = false 
 				promise.then(null, null, function(){
 					isCalled = true
 				}).then(function(){
 					expect(isCalled).to.be.false()
 				}).then(done, done)
+				promise.resolve()
 			})
 			it('would be called when invokes reject() with rejected function', function(done){
-				var promise = iPromise(function(r1, r2){
-					r2()	
-				})
 				var isCalled = false
 				promise.then(null, function(){
 					expect(1).to.be.ok()
@@ -574,17 +498,16 @@ describe('iPromise', function(){
 				}).then(function(){
 					expect(isCalled).to.be.true()
 				},done).then(done, done)
+				promise.reject()
 			})
 			it('won\'t be called when invokes reject() without rejected function', function(done){
-				var promise = iPromise(function(r1, r2){
-					r1()	
-				})
 				var isCalled = false 
 				promise.then(null, null, function(){
 					isCalled = true
 				}).then(function(){
 					expect(isCalled).to.be.false()
 				}).then(done, done)
+				promise.resolve()
 			})
 		})	
 		describe('finally function as argument with catch', function(){
@@ -593,28 +516,24 @@ describe('iPromise', function(){
 				isCalled = false
 			})
 			it('would be called when invokes catch() with rejected function', function(done){
-				var promise = iPromise(function(r1, r2){
-					r2()	
-				})
 				promise.catch(function(){},function(){
 					isCalled = true
 				}).then(function(){
 					expect(isCalled).to.be.true()
 				}).then(done, done)
+				promise.reject()
 			})
 			it('would be called when invokes catch() without rejected function', function(done){
-				var promise = iPromise(function(r1, r2){
-					r2()	
-				})
 				promise.catch(null,function(){
 					isCalled = true
 				}).then(function(){
 					expect(isCalled).to.be.true()
 				}).then(done, done)
+				promise.reject()
 			})
 		})	
 	})
-	/*describe('#<instance>.wait', function() {
+	describe('#<instance>.wait', function() {
 		var promise	
 		beforeEach(function(){
 			promise = iPromise()
@@ -630,7 +549,7 @@ describe('iPromise', function(){
 			}).then(done, done)
 			promise.resolve(1)
 		})
-	})*/
+	})
 	describe('#iPromise.all', function() {
 		var a, b, c
 		beforeEach(function(){
