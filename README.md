@@ -231,9 +231,11 @@ iPromise
 ##Changelog
 ###v0.8.0
 **全局重构**<br/>
-1. 改用事件机制订阅iPromise状态变化事件从而触发相应的处理函数；
-2. 删除实例方法resolve和reject；
-3. 新增类方法resolve和reject。
+1. 改用事件机制订阅iPromise状态变化事件从而触发相应的处理函数；事件机制由TinyES和AsyncES两个模块提供<br/>
+&emsp;*TinyES*：迷你事件系统模块；<br/>
+&emsp;*AsyncES*：异步事件响应系统模块；<br/>
+2. 删除实例方法resolve和reject；<br/>
+3. 新增类方法resolve和reject。<br/>
 
 ###v0.7.0
 **全局重构**<br/>
