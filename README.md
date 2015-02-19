@@ -81,13 +81,10 @@ iPromise
 ###Constructor
 ####`iPromise(mixin, arg)`
 **@description** Create new iPromise object.<br/>
-**@param** {(Function.<Function fulfilledFn,Function rejectedFn>|GeneratorFunction)} [mixin] - Factory function to change the status of iPromise object. Or a Generator Function(feature by ES6).<br/>
+**@param** {(Function.<Function fulfilledFn,Function rejectedFn>|GeneratorFunction)} mixin - Factory function to change the status of iPromise object. Or a Generator Function(feature by ES6).<br/>
 **@param** {...\*} arg - It would be work when `mixin` is an instanceof GeneratorFunction.<br/>
 **@return** {?iPromise} - The returns would be undefined when `mixin` is an instanceof GeneratorFunction.<br/>
 ````
-/* without mixin */
-var p1 = iPromise()
-
 /* mixin is function */
 var p2 = iPromise(function(resolve, reject){
   setTimeout(function(){
@@ -117,14 +114,16 @@ iPromise(function *(name, city){
 **@param** {Function.<\*>} finallyFn - It would be called when iPromise object's status is changed and has subscribed fulfilled or rejected status changing event<br/>
 **@return** {iPromise} - The subset of iPromise object which contains `iPromise#then`, `iPromise#catch` and `iPromise#wait` only.<br/>
 ````
-iPromise()
+iPromise(function(resolve, reject){
+    resolve()
+  })
   .then(function(){
     console.log('from pending to fulfilled')
   }, function(){
     console.log('from pending to rejected')
   }, function(){
     console.log('finally')
-  }).resolve()
+  })
 ````
 ####`iPromise#catch(rejectedFn, finallyFn)`
 **@description** Subscribes the iPromise object's status changed event which is from pending to rejected.<br/>
@@ -132,26 +131,30 @@ iPromise()
 **@param** {Function.<\*>} finallyFn - It would be called when iPromise object's status is changed and has subscribed rejected status changing event<br/>
 **@return** {iPromise} - The subset of iPromise object which contains `iPromise#then`, `iPromise#catch` and `iPromise#wait` only.<br/>
 ````
-iPromise()
+iPromise(function(resolve, reject){
+    reject() 
+  })
   .catch(function(){
     console.log('from pending to rejected')
   }, function(){
     console.log('finally')
-  }).reject()
+  })
 ````
 ####`iPromise#wait(ms)`
 **@description** Invokes the next callback function after ms milliseconds without changing the status of iPromise object.<br/>
 **@param** {number} ms - The time to wait.<br/>
 **@return** {iPromise} - The subset of iPromise object which contains `iPromise#then`, `iPromise#catch` and `iPromise#wait` only.<br/>
 ````
-iPromise()
+iPromise(function(resolve, reject){
+    resolve()
+  })
   .then(function(arg){
     return +new Date()
   })
   .wait(1000)
   .then(function(arg){
     console.log((+new Date()) - arg > 1000) // true
-  }).resolve()
+  })
 ````
 ###Function Properties
 ####`iPromise.resolve(val)`
