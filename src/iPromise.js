@@ -3,7 +3,7 @@
  * @author fsjohnhuang
  * @version v0.8.1
  */
-var version = '0.8.0'
+var version = '0.8.1'
 
 /* 引入工具方法 */
 var utils = require('./utils')
