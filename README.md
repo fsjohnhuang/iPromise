@@ -358,6 +358,7 @@ iPromise.all([thenable, name, promise1]).then(function(arg){
 iPromise.all({a:thenable, b:name, c:promise1}).then(function(arg){
 	alert(arg) // 显示fsjohnhuang
 })
+````
 
 ###v0.3.0
 **新特性**<Br/>
