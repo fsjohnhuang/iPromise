@@ -13,9 +13,11 @@ describe('iPromise', function(){
 
 				var promise = iPromise(function(r){
 					r(1)
+					r(2)
 				})
 
 				promise.then(function(val){
+					alert(val)
 					expect(val).to.be.equal(1)
 				}).then(done, done)
 			})

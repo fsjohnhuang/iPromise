@@ -1,7 +1,7 @@
 /*!
  * An implementation for Promises/A+
  * @author fsjohnhuang
- * @version v0.8.0
+ * @version v0.8.1
  */
 var version = '0.8.0'
 
@@ -74,10 +74,14 @@ var iPromise = module.exports = function(mixin){
 	}
 	else{
 		mixin(function(val){
+			if (def.status) return
+
 			def.val = val
 			def.status = 1
 			def.es.trigger()	
 		}, function(val){
+			if (def.status) return
+
 			def.val = val
 			def.status = 2
 			def.es.trigger()	

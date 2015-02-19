@@ -1,4 +1,4 @@
-iPromise v0.8.0
+iPromise v0.8.1
 =======
 
 **iPromise** is a standalone async library which implements the [Promises/A+](https://promisesaplus.com/). Async codes are confusing because you will dump into the callback hell easily. **iPromise** improves the readability of async codes by saving us from the hell.<br/>
@@ -229,6 +229,10 @@ iPromise
 ````
 
 ##Changelog
+###v0.8.1
+**bug修复**<br/>
+1. 修复重复调用resolve或reject方法时，会覆盖之前的val和reason值的问题。现在无论调用多少次resovle或reject方法，均只有第一次调用是有效的。<br/>
+
 ###v0.8.0
 **全局重构**<br/>
 1. 改用事件机制订阅iPromise状态变化事件从而触发相应的处理函数。<br/>
