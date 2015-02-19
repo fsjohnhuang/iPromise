@@ -85,11 +85,21 @@ var iPromise = module.exports = function(mixin){
 	}
 }
 
+/**
+ * 创建一个状态为fulfilled的iPromise实例
+ * @param  {*} val
+ * @return {iPromise}
+ */
 iPromise.resolve = function(val){
 	return new iPromise(function(resolve){
 		resolve(val)
 	})
 }
+/**
+ * 创建一个状态为rejected的iPromise实例
+ * @param  {*} val
+ * @return {iPromise}
+ */
 iPromise.reject= function(reason){
 	return new iPromise(function(resolve, reject){
 		reject(val)
@@ -191,7 +201,6 @@ function some(isAll, arg){
 	else{
 		args = makeArray(arguments, 1)
 	}
-	for(p in args) ++i
 
 	var fire4Any = false
 		,o = {}
@@ -200,6 +209,7 @@ function some(isAll, arg){
 		o.reject = reject
 	})
 	for (var p in args){
+		++i
 		results[p] = args[p]
 		;(function(p){
 			var deferred = results[p]

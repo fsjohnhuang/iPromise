@@ -1,4 +1,4 @@
-iPromise v0.7.0
+iPromise v0.8.0
 =======
 
 **iPromise** is a standalone async library which implements the [Promises/A+](https://promisesaplus.com/). Async codes are confusing because you will dump into the callback hell easily. **iPromise** improves the readability of async codes by saving us from the hell.<br/>
@@ -11,10 +11,10 @@ iPromise v0.7.0
 &nbsp;[Instance Methods](#instance-methods)<br/>
 &emsp;[iPromise#then(fulfilledFn, rejectedFn, finallyFn)](#ipromisethenfulfilledfn-rejectedfn-finallyfn)<br/>
 &emsp;[iPromise#catch(rejectedFn, finallyFn)](#ipromisecatchrejectedfn-finallyfn)<br/>
-&emsp;[iPromise#resolve(arg)](#ipromiseresolvearg)<br/>
-&emsp;[iPromise#reject(arg)](#ipromiserejectarg)<br/>
 &emsp;[iPromise#wait(ms)](#ipromisewaitms)<br/>
 &nbsp;[Function Properties](#function-properties)<br/>
+&emsp;[iPromise.resolve(val)](#ipromiseresolvearg)<br/>
+&emsp;[iPromise.reject(reason)](#ipromiserejectarg)<br/>
 &emsp;[iPromise.all(condition)](#ipromiseallcondition)<br/>
 &emsp;[iPromise.any(condition)](#ipromiseanycondition)<br/>
 &emsp;[iPromise.wait(ms, arg)](#ipromisewaitms-arg)<br/>
@@ -139,40 +139,6 @@ iPromise()
     console.log('finally')
   }).reject()
 ````
-####`iPromise#resolve(arg)`
-**@description** Change the status of iPromise object from pending to fulfilled.<br/>
-**@param** {...\*} arg - It would be as the arguments of fulfilled callback function which is invoked first.<br/>
-````
-/* arg is such as ({*} arg) */
-iPromise()
-  .then(function(arg){
-    console.log(arg)
-  })
-  .resolve(1)
-/* arg is such as (arg1, arg2[, argn]*) */
-iPromise()
-  .then(function(arg){
-    console.log(arg[0] + arg[1])
-  })
-  .resolve(1, 2)
-````
-####`iPromise#reject(arg)`
-**@description** Change the status of iPromise object from pending to rejected.<br/>
-**@param** {...\*} arg - It would be as the arguments of rejected callback function which is invoked first.<br/>
-````
-/* arg is such as ({*} arg) */
-iPromise()
-  .then(null, function(arg){
-    console.log(arg)
-  })
-  .reject(1)
-/* arg is such as (arg1, arg2[, argn]*) */
-iPromise()
-  .catch(function(arg){
-    console.log(arg[0] + arg[1])
-  })
-  .reject(1, 2)
-````
 ####`iPromise#wait(ms)`
 **@description** Invokes the next callback function after ms milliseconds without changing the status of iPromise object.<br/>
 **@param** {number} ms - The time to wait.<br/>
@@ -188,6 +154,28 @@ iPromise()
   }).resolve()
 ````
 ###Function Properties
+####`iPromise.resolve(val)`
+**@description** Change the status of iPromise object from pending to fulfilled.<br/>
+**@param** {\*} val - It would be as the argument of fulfilled callback function which is invoked first.<br/>
+````
+/* arg is such as ({*} arg) */
+iPromise
+  .resolve(1)
+  .then(function(arg){
+    console.log(arg)
+  })
+````
+####`iPromise.reject(reason)`
+**@description** Change the status of iPromise object from pending to rejected.<br/>
+**@param** {\*} arg - It would be as the argument of rejected callback function which is invoked first.<br/>
+````
+/* arg is such as ({*} arg) */
+iPromise
+  .reject(1)
+  .then(null, function(arg){
+    console.log(arg)
+  })
+````
 ####`iPromise.all(condition)`
 **@description** Change the status of iPromise object from pending to fulfilled when meets all conditions, otherwise would change status from pending to rejected<br/>
 **@param** {...\*} condition<br/>
@@ -241,6 +229,12 @@ iPromise
 ````
 
 ##Changelog
+###v0.8.0
+**全局重构**<br/>
+1. 改用事件机制订阅iPromise状态变化事件从而触发相应的处理函数；
+2. 删除实例方法resolve和reject；
+3. 新增类方法resolve和reject。
+
 ###v0.7.0
 **全局重构**<br/>
 **新增**<br/>
@@ -306,12 +300,7 @@ iPromise(function *(dataSrc, tplSrc){
 **新特性**<br/>
 1. 新增`{Promise} wait({number} ms)`和`{Promise} iPromise.wait({number} ms)`，等待ms毫秒在执行后续的回调函数，此方法不会改变Deferred实例状态和责任链传递的值。<br/>
 
-###v0.4.0
-**新特性**<br/>
-1. 新增`{Promise} wait({number} ms)`和`{Promise} iPromise.wait({number} ms)`，等待ms毫秒在执行后续的回调函数，此方法不会改变Deferred实例状态和责任链传递的值。<br/>
-
 ##v0.4.0
->>>>>>> 4a9102f96211468a3361b8239a0627a80c475a54
 **bug修复**<br/>
 1. \#20141215 可重复添加回调函数->仅能添加一次回调函数<br/>
 **新特性**<br/>

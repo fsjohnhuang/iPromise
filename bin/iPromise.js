@@ -87,7 +87,7 @@ var TinyES = module.exports = function(){
 /*!
  * An implementation for Promises/A+
  * @author fsjohnhuang
- * @version v0.7.1
+ * @version v0.8.0
  */
 var version = '0.8.0'
 
@@ -211,7 +211,6 @@ iPromise.any = iPromise.race = function(){
  */
 iPromise.wait = defnWait()
 
-
 /**
  * 订阅iPromise状态变化事件
  * @method sub
@@ -278,7 +277,6 @@ function some(isAll, arg){
 	else{
 		args = makeArray(arguments, 1)
 	}
-	for(p in args) ++i
 
 	var fire4Any = false
 		,o = {}
@@ -287,6 +285,7 @@ function some(isAll, arg){
 		o.reject = reject
 	})
 	for (var p in args){
+		++i
 		results[p] = args[p]
 		;(function(p){
 			var deferred = results[p]
