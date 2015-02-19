@@ -13,8 +13,8 @@ iPromise v0.8.1
 &emsp;[iPromise#catch(rejectedFn, finallyFn)](#ipromisecatchrejectedfn-finallyfn)<br/>
 &emsp;[iPromise#wait(ms)](#ipromisewaitms)<br/>
 &nbsp;[Function Properties](#function-properties)<br/>
-&emsp;[iPromise.resolve(val)](#ipromiseresolvearg)<br/>
-&emsp;[iPromise.reject(reason)](#ipromiserejectarg)<br/>
+&emsp;[iPromise.resolve(val)](#ipromiseresolveval)<br/>
+&emsp;[iPromise.reject(reason)](#ipromiserejectreason)<br/>
 &emsp;[iPromise.all(condition)](#ipromiseallcondition)<br/>
 &emsp;[iPromise.any(condition)](#ipromiseanycondition)<br/>
 &emsp;[iPromise.wait(ms, arg)](#ipromisewaitms-arg)<br/>
