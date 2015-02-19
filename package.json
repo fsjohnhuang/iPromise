@@ -6,7 +6,6 @@
     "test": "test"
   },
   "scripts": {
-    "wclean": "rmdir /S bin",
     "build": "mkdir bin && browserify src/iPromise.js -s iPromise -o bin/iPromise.js",
     "dist": "mkdir dist && uglifyjs bin/iPromise.js -mc > dist/iPromise.min.js"
   },
