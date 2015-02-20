@@ -167,6 +167,13 @@ iPromise
   .then(function(arg){
     console.log(arg)
   })
+
+/* arg is such as ({Thenable} arg) */
+iPromise
+  .resolve({then:function(resolve){resolve('test')}})
+  .then(function(arg){
+    console.log(arg)
+  })
 ````
 ####`iPromise.reject(reason)`
 **@description** Change the status of iPromise object from pending to rejected.<br/>
@@ -176,6 +183,13 @@ iPromise
 iPromise
   .reject(1)
   .then(null, function(arg){
+    console.log(arg)
+  })
+
+/* arg is such as ({Thenable} arg) */
+iPromise
+  .reject({then:function(resolve){resolve('test')}})
+  .then(function(arg){
     console.log(arg)
   })
 ````
