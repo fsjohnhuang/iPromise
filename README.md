@@ -232,6 +232,10 @@ iPromise
 ````
 
 ##Changelog
+###v0.8.2
+**bug修复**<br/>
+1. 修复后`iPromise.resolve({Thenable})`和`iPromise.reject({Thenable})`方法均可将一个thenable对象转换为iPromise对象<br/>
+
 ###v0.8.1
 **bug修复**<br/>
 1. 修复重复调用resolve或reject方法时，会覆盖之前的val和reason值的问题。现在无论调用多少次resovle或reject方法，均只有第一次调用是有效的。<br/>
