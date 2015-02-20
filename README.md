@@ -4,7 +4,7 @@ iPromise v0.8.1
 **iPromise** is a standalone async library which implements the [Promises/A+](https://promisesaplus.com/). Async codes are confusing because you will dump into the callback hell easily. **iPromise** improves the readability of async codes by saving us from the hell.<br/>
 
 ###In This Documentation
-[1. Getting Started](#getting-started)<br/>
+[1. Tutorial](#tutorial)<br/>
 [2. API](#api)<br/>
 &nbsp;[Constructor](#constructor)<br/>
 &emsp;[iPromise(mixin, arg)](#ipromisemixin-arg)<br/>
