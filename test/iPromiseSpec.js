@@ -17,7 +17,6 @@ describe('iPromise', function(){
 				})
 
 				promise.then(function(val){
-					alert(val)
 					expect(val).to.be.equal(1)
 				}).then(done, done)
 			})
@@ -79,6 +78,12 @@ describe('iPromise', function(){
 				promise.then(function(val){
 					expect(val).to.have.property('then')
 						.that.is.an.instanceof(Function)
+				}).then(done, done)
+			})
+			it('expect resolve(then:function(resolve){resolve("test")})', function(done){
+				var p = iPromise.resolve({then: function(resolve){resolve("test")}})
+				p.then(function(val){
+					expect(val).to.be.equal("test")
 				}).then(done, done)
 			})
 		})
@@ -345,6 +350,12 @@ describe('iPromise', function(){
 				promise.then({a:1}, function(val){
 					expect(val).to.have.property('then')
 						.that.is.an.instanceof(Function)
+				}).then(done, done)
+			})
+			it('expect reject(then:function(resolve, reject){reject("test")})', function(done){
+				var p = iPromise.reject({then: function(resolve,reject){reject("test")}})
+				p.catch(function(val){
+					expect(val).to.be.equal("test")
 				}).then(done, done)
 			})
 		})

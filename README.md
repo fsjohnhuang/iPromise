@@ -1,4 +1,4 @@
-iPromise v0.8.1
+iPromise v0.8.2
 =======
 
 **iPromise** is a standalone async library which implements the [Promises/A+](https://promisesaplus.com/). Async codes are confusing because you will dump into the callback hell easily. **iPromise** improves the readability of async codes by saving us from the hell.<br/>

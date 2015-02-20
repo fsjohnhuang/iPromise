@@ -1,9 +1,9 @@
 /*!
  * An implementation for Promises/A+
  * @author fsjohnhuang
- * @version v0.8.1
+ * @version v0.8.2
  */
-var version = '0.8.1'
+var version = '0.8.2'
 
 /* 引入工具方法 */
 var utils = require('./utils')
@@ -95,8 +95,8 @@ var iPromise = module.exports = function(mixin){
  * @return {iPromise}
  */
 iPromise.resolve = function(val){
-	return new iPromise(function(resolve){
-		resolve(val)
+	return new iPromise(function(resolve, reject){
+		val.then ? val.then(resolve, reject) : resolve(val)
 	})
 }
 /**
@@ -106,7 +106,7 @@ iPromise.resolve = function(val){
  */
 iPromise.reject= function(reason){
 	return new iPromise(function(resolve, reject){
-		reject(val)
+		reason.then ? reason.then(resolve, reject) : reject(reason)
 	})
 }
 /**
