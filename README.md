@@ -16,7 +16,7 @@ iPromise v0.8.1
 &emsp;[iPromise.resolve(val)](#ipromiseresolveval)<br/>
 &emsp;[iPromise.reject(reason)](#ipromiserejectreason)<br/>
 &emsp;[iPromise.all(condition)](#ipromiseallcondition)<br/>
-&emsp;[iPromise.any(condition)](#ipromiseanycondition)<br/>
+&emsp;[iPromise.any/race(condition)](#ipromiseanycondition)<br/>
 &emsp;[iPromise.wait(ms, arg)](#ipromisewaitms-arg)<br/>
 [3. Changelog](#changelog)<br/>
 [4. Referrence](#referrence)<br/>
@@ -199,7 +199,7 @@ iPromise.all(a,b,c).then(function(val){
   console.log(curr - o > 600) // true
 }
 ````
-####`iPromise.any(condition)`
+####`iPromise.any(condition) / iPromise.race(condition)`
 **@description** Change the status of iPromise object from pending to fulfilled when meets any condition, otherwise would change status from pending to rejected<br/>
 **@param** {...\*} condition<br/>
 **@return** {iPromise} - The subset of iPromise object which contains `iPromise#then`, `iPromise#catch` and `iPromise#wait` only.<br/>
