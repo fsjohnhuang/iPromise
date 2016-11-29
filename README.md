@@ -1,4 +1,4 @@
-iPromise v0.8.2
+iPromise v0.8.3
 =======
 
 **iPromise** is a standalone async library which implements the [Promises/A+](https://promisesaplus.com/). Async codes are confusing because you will dump into the callback hell easily. **iPromise** improves the readability of async codes by saving us from the hell.<br/>
@@ -92,8 +92,8 @@ var p2 = iPromise(function(resolve, reject){
   }, 5000)
 })
 
-/* mixin is generator function */
-iPromise(function *(name, city){
+/* returns coroutine when mixin is generator function */
+var coroutine = iPromise(function* (name, city){
   console.log('Welcome to ' + city)
 
   var msg
@@ -104,7 +104,8 @@ iPromise(function *(name, city){
     msg = 'Hi, ' + name
   }
   console.log(msg)
-}, 'fsjohnhuang', 'fs')
+})
+coroutine('fsjohnhuang', 'fs')
 ````
 ###Instance Methods
 ####`iPromise#then(fulfilledFn, rejectedFn, finallyFn)`
@@ -246,6 +247,16 @@ iPromise
 ````
 
 ##Changelog
+###v0.8.3
+**bug修复**<br>
+1. 修复`iPromise(function*(a){},1)`，a为undefined的问题。
+**API修改**<br>
+1. `iPromise(function*(a){},1)`改为
+```
+var coroutine = iPromsie(function*(a, b){})
+coroutine(1, 2)
+```
+
 ###v0.8.2
 **bug修复**<br/>
 1. 修复后`iPromise.resolve({Thenable})`和`iPromise.reject({Thenable})`方法均可将一个thenable对象转换为iPromise对象<br/>

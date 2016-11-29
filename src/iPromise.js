@@ -1,9 +1,9 @@
 /*!
  * An implementation for Promises/A+
  * @author fsjohnhuang
- * @version v0.8.2
+ * @version v0.8.3
  */
-var version = '0.8.2'
+var version = '0.8.3'
 
 /* 引入工具方法 */
 var utils = require('./utils')
@@ -51,26 +51,29 @@ var iPromise = module.exports = function(mixin){
 	if (isES6GF){
 		// FF下生成器函数的入参必须在创建迭代器时传递
 		// 若第一次调用迭代器的next函数传递参数，则会报TypeError: attempt to send 第一个入参值 to newborn generator
-		var iterator = mixin.apply(null, makeArray(arguments,1))
-		var next = function(arg){
-			var deferred = iPromise(function(resolve){
-				resolve(arg)
-			})
-
-			return deferred.then(function(arg){
-					var yieldReturn = iterator.next.call(iterator, arg)
-					if(yieldReturn.done) throw Error('StopIteration')
-					
-					return yieldReturn.value
-				}).then(next, function(e){
-					iterator.throw(e)
+		// v0.8.3 返回coroutine，而不是直接执行
+		return function(){
+			var iterator = mixin.apply(null, makeArray(arguments))
+			var next = function(arg){
+				var deferred = iPromise(function(resolve){
+					resolve(arg)
 				})
-		}
-		new iPromise(function(resolve){
-			resolve()
-		}).then(next)
 
-		return void 0
+				return deferred.then(function(arg){
+						var yieldReturn = iterator.next.call(iterator, arg)
+						if(yieldReturn.done) throw Error('StopIteration')
+						
+						return yieldReturn.value
+					}).then(next, function(e){
+						iterator.throw(e)
+					})
+			}
+			new iPromise(function(resolve){
+				resolve()
+			}).then(next)
+
+			return void 0
+		}
 	}
 	else{
 		mixin(function(val){

@@ -833,11 +833,11 @@ describe('iPromise', function(){
 					then:function(r,reject){
 						setTimeout(function(){
 							r(val + 1)
-						}, 500)	
+						}, 500)
 					}
 				}
 			}
-			iPromise(function*(a,b,c){
+			var coroutine = iPromise(function*(a,b,c){
 				var err
 				try{
 					var s = yield getdata1()
@@ -847,6 +847,9 @@ describe('iPromise', function(){
 					err = e
 				}
 				try{
+					expect(a).to.be.equal(1)
+					expect(b).to.be.equal(2)
+					expect(c).to.be.equal(3)
 					expect(val).to.be.equal(2)
 					expect(err).to.be.undefined()
 					done()
@@ -854,7 +857,8 @@ describe('iPromise', function(){
 				catch(e){
 					done(e)
 				}
-			},1,2,3)
+			})
+			coroutine(1,2,3)
 		})
 		it('with error', function(done){
 			var getdata1 = function(val){
@@ -871,7 +875,7 @@ describe('iPromise', function(){
 					}, 500)	
 				})
 			}
-			iPromise(function*(a,b,c){
+			var coroutine = iPromise(function*(a,b,c){
 				var err
 				try{
 					var s = yield getdata1()
@@ -882,13 +886,17 @@ describe('iPromise', function(){
 				}
 
 				try{
+					expect(a).to.be.equal(1)
+					expect(b).to.be.equal(2)
+					expect(c).to.be.equal(3)
 					expect(err).to.be.an.instanceof(Error)
 					done()
 				}
 				catch(e){
 					done(e)
 				}
-			},1,2,3)
+			})
+			coroutine(1,2,3)
 		})
 	})
 })

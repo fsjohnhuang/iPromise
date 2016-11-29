@@ -1,15 +1,14 @@
 {
   "name": "iPromise",
-  "version": "0.7.0",
+  "version": "0.8.3",
   "description": "An implementation of Promises/A+",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "mkdir bin && browserify src/iPromise.js -s iPromise -o bin/iPromise.js",
-    "dist": "mkdir dist && uglifyjs bin/iPromise.js -mc > dist/iPromise.min.js"
+    "build": "rm -rf bin && mkdir bin && browserify src/iPromise.js -s iPromise -o bin/iPromise.js",
+    "dist": "rm -rf bin && mkdir dist && uglifyjs bin/iPromise.js -mc > dist/iPromise.min.js"
   },
-	"main": "./src/iPromise.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/fsjohnhuang/iPromise.git"
